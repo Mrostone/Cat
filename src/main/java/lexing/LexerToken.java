@@ -4,9 +4,12 @@ import java.util.Map;
 import java.util.HashMap;
 
 public enum LexerToken {
-    PRINT("print");
+    PRINT("print"),
+    LPAREN("("),
+    RPAREN(")"),
+    STRING("");
 
-    private final String text;
+    private String text;
 
     private static final Map<String, LexerToken> BY_TEXT = new HashMap<>();
 
@@ -22,6 +25,10 @@ public enum LexerToken {
 
     public String getText(){
         return this.text;
+    }
+
+    public void setText(String text){
+        this.text = text;
     }
 
     public static LexerToken fromText(String text) {

@@ -9,6 +9,8 @@ import java.io.IOException;
 public class Lexer {
     String currentToken = "";
     PushbackReader pushbackReader;
+    boolean inQuote = false;
+    char quote = ' ';
 
     public Lexer(String filename){
         try{
@@ -26,9 +28,33 @@ public class Lexer {
             while ((ValueChar = this.pushbackReader.read()) != -1) {
                 char c = (char) ValueChar;
 
-                LexerToken temp = addChar(c);
-                if(temp != null){
-                    return temp;
+                if(inQuote){
+                    if(c != '"' && c != '\''){
+                        addChar(c);
+                        continue;
+                    }
+                    else if(quote != c){
+                        addChar(c);
+                        continue;
+                    }
+                    else{
+                        LexerToken lexerToken = LexerToken.STRING;
+                        lexerToken.setText(currentToken);
+                        currentToken = "";
+                        inQuote = false;
+                        return lexerToken;
+                    }
+                }
+                else if(c == '"' || c == '\''){
+                    inQuote = true;
+                    quote = c;
+                    continue;
+                }
+
+                LexerToken out = addChar(c);
+                if(out != null){
+                    currentToken = "";
+                    return out;
                 }
             }
             return LexerToken.fromText(currentToken);
@@ -41,6 +67,7 @@ public class Lexer {
 
     private LexerToken addChar(char c){
         currentToken += c;
+        //System.out.println(currentToken);
 
         return LexerToken.fromText(currentToken);
     }

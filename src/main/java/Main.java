@@ -9,6 +9,7 @@ class Main {
         LexerToken token = lexer.getToken();
         while (token != null) {
             System.out.println(token.getText());
+            System.out.println(token);
             token = lexer.getToken();
         }
 
