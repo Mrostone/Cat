@@ -22,7 +22,7 @@ public class Lexer {
         }
     }
 
-    public LexerToken getToken(){
+    public Token getToken(){
         try{
             int ValueChar;
             while ((ValueChar = this.pushbackReader.read()) != -1) {
@@ -38,11 +38,10 @@ public class Lexer {
                         continue;
                     }
                     else{
-                        LexerToken lexerToken = LexerToken.STRING;
-                        lexerToken.setText(currentToken);
+                        Token token = new Token(TokenType.STRING, currentToken);
                         currentToken = "";
                         inQuote = false;
-                        return lexerToken;
+                        return token;
                     }
                 }
                 else if(c == '"' || c == '\''){
@@ -51,13 +50,18 @@ public class Lexer {
                     continue;
                 }
 
-                LexerToken out = addChar(c);
+                Token out = addChar(c);
                 if(out != null){
                     currentToken = "";
                     return out;
                 }
             }
-            return LexerToken.fromText(currentToken);
+            TokenType type = TokenType.fromText(currentToken);
+            if(type == null){
+                return null;
+            }
+
+            return new Token(type, currentToken);
         } 
         catch (IOException e) {
             System.err.println("Error reading file : " + e.getMessage());
@@ -65,10 +69,14 @@ public class Lexer {
         }
     }
 
-    private LexerToken addChar(char c){
+    private Token addChar(char c){
         currentToken += c;
-        //System.out.println(currentToken);
 
-        return LexerToken.fromText(currentToken);
+        TokenType type = TokenType.fromText(currentToken);
+        if(type == null){
+            return null;
+        }
+
+        return new Token(type, currentToken);
     }
 }
