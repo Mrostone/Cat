@@ -1,10 +1,6 @@
-package main.java;
+package io.rostone.cat;
 
-import main.java.ast.Exp;
-import main.java.lexing.Lexer;
-import main.java.lexing.Token;
-
-class Main {
+public class Main {
     public static void main(String[] args){
         Lexer lexer = new Lexer(args[0]);
         Token token = lexer.getToken();
