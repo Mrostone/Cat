@@ -1,4 +1,4 @@
-package main.java.lexing;
+package io.rostone.cat.lexing;
 
 public record Token(TokenType type, String text) {
     public String getText(){

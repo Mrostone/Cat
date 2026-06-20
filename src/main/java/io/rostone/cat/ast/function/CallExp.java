@@ -1,6 +1,6 @@
-package main.java.ast.function;
+package io.rostone.cat.ast.function;
 
-import main.java.ast.Exp;
+import io.rostone.cat.ast.Exp;
 
 public class CallExp extends Exp {
     @Override

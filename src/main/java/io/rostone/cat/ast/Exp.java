@@ -1,4 +1,4 @@
-package main.java.ast;
+package io.rostone.cat.ast;
 
 import java.util.List;
 

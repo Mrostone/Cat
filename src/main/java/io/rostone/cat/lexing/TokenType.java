@@ -1,4 +1,4 @@
-package main.java.lexing;
+package io.rostone.cat.lexing;
 
 import java.util.Map;
 import java.util.HashMap;

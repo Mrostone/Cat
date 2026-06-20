@@ -1,4 +1,4 @@
-package main.java.lexing;
+package io.rostone.cat.lexing;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

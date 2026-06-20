@@ -1,4 +1,4 @@
-package main.java.lexing;
+package io.rostone.cat.lexing;
 
 public enum TokenCategory {
     PRIMITIVE,
