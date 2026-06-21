@@ -6,8 +6,8 @@ import io.rostone.cat.lexing.*;
 import java.util.*;
 
 public class CallExp extends Exp {
-    Token func;
-    List<Token> list;
+    public Token func;
+    public List<Token> list;
 
     public CallExp(){
 

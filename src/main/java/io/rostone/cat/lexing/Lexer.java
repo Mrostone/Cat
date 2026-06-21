@@ -10,6 +10,7 @@ public class Lexer {
     String currentToken = "";
     PushbackReader pushbackReader;
     boolean inQuote = false;
+    boolean isNumber = false;
     char quote = ' ';
 
     public Lexer(String filename){
@@ -27,6 +28,25 @@ public class Lexer {
             int ValueChar;
             while ((ValueChar = this.pushbackReader.read()) != -1) {
                 char c = (char) ValueChar;
+
+                if(isNumber){
+                    if(c >= '0' && c <= '9'){
+                        addChar(c);
+                        continue;
+                    }
+                    else {
+                        Token token = new Token(TokenType.NUMBER, currentToken);
+                        currentToken = "";
+                        pushbackReader.unread(c);
+                        isNumber = false;
+                        return token;
+                    }
+                }
+                else if (c >= '0' && c <= '9'){
+                    isNumber = true;
+                    addChar(c);
+                    continue;
+                }
 
                 if(inQuote){
                     if(c != '"' && c != '\''){

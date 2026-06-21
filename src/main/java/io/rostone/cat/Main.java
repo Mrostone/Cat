@@ -1,5 +1,6 @@
 package io.rostone.cat;
 
+import io.rostone.cat.ast.Ast;
 import io.rostone.cat.parser.*;
 
 public class Main {
@@ -10,7 +11,9 @@ public class Main {
         }
         Parser parse = new Parser();
 
-        parse.parse(args[0]);
+        Ast ast = parse.parse(args[0]);
+
+        System.out.println(ast.exps);
 
         System.out.println("========= END ==========");
     }

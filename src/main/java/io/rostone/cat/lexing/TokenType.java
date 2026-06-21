@@ -12,7 +12,8 @@ public enum TokenType {
     RPAREN(")", TokenCategory.PONCTUATION),
 
     // editable token
-    STRING("string", TokenCategory.VARIABLE);
+    STRING(null, TokenCategory.VARIABLE),
+    NUMBER(null, TokenCategory.VARIABLE);
 
     private final String text;
     private final TokenCategory category;
