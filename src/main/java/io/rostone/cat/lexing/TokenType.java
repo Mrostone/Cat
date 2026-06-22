@@ -6,10 +6,13 @@ import java.util.HashMap;
 public enum TokenType {
     PRINT("print", TokenCategory.PRIMITIVE),
     EXIT("exit", TokenCategory.PRIMITIVE),
+    STRING_COMPARE("stringCompare", TokenCategory.PRIMITIVE),
 
     // Ponctuation
     LPAREN("(", TokenCategory.PONCTUATION),
     RPAREN(")", TokenCategory.PONCTUATION),
+    COMMA(",", TokenCategory.PONCTUATION),
+    SEMI_COLON(";", TokenCategory.PONCTUATION),
 
     // editable token
     STRING(null, TokenCategory.VARIABLE),

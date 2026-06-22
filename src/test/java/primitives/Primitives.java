@@ -19,7 +19,11 @@ public class Primitives {
 
         assertEquals(1, ast.exps.size());
         assertInstanceOf(CallExp.class, ast.exps.get(0));
-        assertEquals(TokenType.PRINT, ((CallExp) ast.exps.get(0)).func.type());
+        assertEquals("print", ((CallExp) ast.exps.get(0)).name);
+        assertEquals(1, ((CallExp) ast.exps.get(0)).list.size());
+
+        assertEquals(TokenType.STRING, ((CallExp) ast.exps.get(0)).list.get(0).type());
+        assertEquals("Hello World !", ((CallExp) ast.exps.get(0)).list.get(0).text());
     }
 
     @Test
@@ -28,6 +32,25 @@ public class Primitives {
 
         assertEquals(1, ast.exps.size());
         assertInstanceOf(CallExp.class, ast.exps.get(0));
-        assertEquals(TokenType.EXIT, ((CallExp) ast.exps.get(0)).func.type());
+        assertEquals("exit", ((CallExp) ast.exps.get(0)).name);
+        assertEquals(1, ((CallExp) ast.exps.get(0)).list.size());
+
+        assertEquals(TokenType.NUMBER, ((CallExp) ast.exps.get(0)).list.get(0).type());
+        assertEquals("3", ((CallExp) ast.exps.get(0)).list.get(0).text());
+    }
+
+    @Test
+    void stringCompare() {
+        Ast ast = parse.parse("src/test/java/primitives/stringCompare.cat");
+
+        assertEquals(1, ast.exps.size());
+        assertInstanceOf(CallExp.class, ast.exps.get(0));
+        assertEquals("stringCompare", ((CallExp) ast.exps.get(0)).name);
+        assertEquals(2, ((CallExp) ast.exps.get(0)).list.size());
+
+        assertEquals(TokenType.STRING, ((CallExp) ast.exps.get(0)).list.get(0).type());
+        assertEquals("toto", ((CallExp) ast.exps.get(0)).list.get(0).text());
+        assertEquals(TokenType.STRING, ((CallExp) ast.exps.get(0)).list.get(1).type());
+        assertEquals("tata", ((CallExp) ast.exps.get(0)).list.get(1).text());
     }
 }

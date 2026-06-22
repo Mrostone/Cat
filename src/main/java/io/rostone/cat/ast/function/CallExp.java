@@ -6,16 +6,18 @@ import io.rostone.cat.lexing.*;
 import java.util.*;
 
 public class CallExp extends Exp {
-    public Token func;
+    public String name;
     public List<Token> list;
+    public FunctionDec functionDec;
 
     public CallExp(){
 
     }
 
-    private CallExp(Token func, List<Token> list){
-        this.func = func;
+    private CallExp(String name, List<Token> list, FunctionDec functionDec){
+        this.name = name;
         this.list = list;
+        this.functionDec = functionDec;
     }
 
     @Override
@@ -31,9 +33,19 @@ public class CallExp extends Exp {
         {
             return null;
         }
-        for (int i = 2; i < list.size() - 2; i++){
-            if(list.get(i).getCategory() != TokenCategory.VARIABLE){
-                return null;
+        ArrayList<Token> listArgs = new ArrayList<>();
+        for (int i = 2; i <= list.size() - 2; i++){
+            if(i % 2 == 0){
+                if(list.get(i).getCategory() != TokenCategory.VARIABLE)
+                {
+                    return null;
+                }
+                listArgs.add(list.get(i));
+            }
+            else{
+                if(list.get(i).getCategory() != TokenCategory.PONCTUATION){
+                    return null;
+                }
             }
         }
         if(list.get(list.size() - 1).type() != TokenType.RPAREN)
@@ -41,6 +53,6 @@ public class CallExp extends Exp {
             return null;
         }
 
-        return new CallExp(list.get(0), list.subList(2,list.size() - 1)); 
+        return new CallExp(list.get(0).text(), listArgs, null); 
     }
 }

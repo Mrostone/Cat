@@ -1,6 +1,7 @@
 package io.rostone.cat;
 
 import io.rostone.cat.ast.Ast;
+import io.rostone.cat.ast.function.CallExp;
 import io.rostone.cat.parser.*;
 
 public class Main {
@@ -13,7 +14,7 @@ public class Main {
 
         Ast ast = parse.parse(args[0]);
 
-        System.out.println(ast.exps);
+        System.out.println(((CallExp) ast.exps.get(0)).list);
 
         System.out.println("========= END ==========");
     }
