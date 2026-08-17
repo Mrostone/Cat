@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import io.rostone.cat.antlr.CatLexer;
 import io.rostone.cat.antlr.CatParser;
@@ -18,17 +17,6 @@ public class Main {
             System.out.println("No args given");
             return;
         }
-        //Parser parse = new Parser();
-//
-        //Ast ast = parse.parse(args[0]);
-//
-        //System.out.println("======= ast =========");
-        //Ast.toHtml(ast, Path.of("ast.html"));
-        //System.out.println("======= end ast =====");
-//
-        //System.out.println(((CallExp) ast.exps.get(0)).list);
-//
-        //System.out.println("========= END ==========");
         CharStream input;
         try {
                 input = CharStreams.fromFileName(args[0]);
@@ -38,10 +26,17 @@ public class Main {
 
                 Ast ast = parser.ast().node;
 
+                if (parser.getNumberOfSyntaxErrors() > 0) {
+                    System.err.println("Compilation failed: Syntax errors found.");
+                    System.exit(1);
+                }
+
                 Ast.toHtml(ast, Path.of("ast.html"));
         } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                System.err.println("Compilation failed: Syntax errors found.");
+                System.exit(1);
         }
     }
 }

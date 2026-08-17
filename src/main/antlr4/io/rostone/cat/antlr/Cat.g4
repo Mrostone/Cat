@@ -8,6 +8,7 @@ import io.rostone.cat.ast.var.*;
 import io.rostone.cat.ast.function.CallExp;
 import java.util.*;
 import io.rostone.cat.antlr.*;
+import io.rostone.cat.ast.type.*;
 }
 
 ast returns [Ast node]
@@ -17,6 +18,13 @@ ast returns [Ast node]
 
 stmt returns [Exp node]
     : e=exp ';'   { $node = $e.node; }
+    ;
+
+type returns [Type node]
+    : INT_NAME { $node = new IntType(); }
+    | FLOAT_NAME { $node = new FloatType(); }
+    | STRING_NAME { $node = new StringType(); }
+    | BOOL_NAME { $node = new BoolType(); }
     ;
 
 exp returns [Exp node]
@@ -29,6 +37,7 @@ exp returns [Exp node]
         }
     | INT      { $node = new IntExp($INT.text); }
     | STRING   { $node = new StringExp(Utils.unescape($STRING.text)); }
+    | t=type ID '=' e=exp { $node = new VarDec($ID.text, $t.node, $e.node); }
     | '(' e=exp ')'   { $node = $e.node; }
     ;
 
@@ -39,7 +48,12 @@ argList returns [List<Exp> list]
 
 // LEXER
 
-INT     : [0-9]+ ;
+INT_NAME : 'int';
+FLOAT_NAME : 'float';
+STRING_NAME : 'string';
+BOOL_NAME : 'bool';
+
+INT     : '-'? [0-9]+ ;
 FLOAT   : [0-9]+ '.' [0-9]+ ;
 STRING  : '"' (~["\\] | '\\' .)* '"' ;
 ID      : [a-zA-Z_] [a-zA-Z_0-9]* ;
