@@ -31,7 +31,7 @@ public class Main {
                     System.exit(1);
                 }
 
-                Ast.toHtml(ast, Path.of("ast.html"));
+                //Ast.toHtml(ast, Path.of("ast.html"));
         } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
