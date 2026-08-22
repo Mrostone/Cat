@@ -9,6 +9,7 @@ import io.rostone.cat.ast.function.CallExp;
 import java.util.*;
 import io.rostone.cat.antlr.*;
 import io.rostone.cat.ast.type.*;
+import io.rostone.cat.ast.function.FunctionDec;
 }
 
 ast returns [Ast node]
@@ -27,6 +28,15 @@ type returns [Type node]
     | BOOL_NAME { $node = new BoolType(); }
     ;
 
+var returns [ VarDec node]
+    : t=type ID { $node = new VarDec($ID.text, $t.node, null); }
+    ;
+
+varList returns [ List<VarDec> list]
+    @init { $list = new ArrayList<>(); }
+    : v=var { $list.add($v.node); } (',' v=var { $list.add($v.node); })*
+    ;
+
 exp returns [Exp node]
     : ID '(' a=argList? ')'
         {
@@ -38,6 +48,7 @@ exp returns [Exp node]
     | INT      { $node = new IntExp($INT.text); }
     | STRING   { $node = new StringExp(Utils.unescape($STRING.text)); }
     | t=type ID '=' e=exp { $node = new VarDec($ID.text, $t.node, $e.node); }
+    | t=type ID '(' l=varList ')' '{' b=exp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $b.node); }
     | '(' e=exp ')'   { $node = $e.node; }
     ;
 

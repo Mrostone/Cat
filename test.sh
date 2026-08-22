@@ -8,6 +8,7 @@ PUR="\033[0;35m"
 BLU="\033[0;34m"
 CYA="\033[0;36m"
 
+HOME_PWD=$(pwd)
 
 TOTAL=0
 SUCCES=0
@@ -47,8 +48,6 @@ else
 fi
 
 TEST_FOLDER_VALID="src/test/java/valid/"
-
-HOME_PWD=$(pwd)
 
 TOTAL=0
 SUCCES=0
