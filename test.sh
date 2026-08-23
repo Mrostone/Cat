@@ -18,6 +18,22 @@ color()
     echo -e "$@" $WHI
 }
 
+testParse()
+{
+	result=$(cat "$1.txt" | sed '/^$/d;s/[[:blank:]]//g')
+	expect=$(cat $1 | sed '/^$/d;s/[[:blank:]]//g' | tr -d '\n')
+	if [ "$result" = "$expect" ]; then
+		color $GRN"$1$WHI -- $duration"
+                SUCCES=$((SUCCES+1))
+		rm "$1.txt"
+        else
+                color $RED"$1$WHI --$YEL different parse$WHI -- $duration"
+		echo $result
+		echo "--"
+		echo $expect
+	fi
+}
+
 file()
 {
 	t1=$(date +%s%N)
@@ -27,8 +43,9 @@ file()
 	diff_ms=$(( (t2 - t1) / 1000000 ))
 	duration=$(printf "%d.%03d s" $((diff_ms / 1000)) $((diff_ms % 1000)))
 	if [ $result -eq 0 ]; then
-                color $GRN"$1$WHI -- $duration"
-		SUCCES=$((SUCCES+1))
+		testParse $1
+                #color $GRN"$1$WHI -- $duration"
+		#SUCCES=$((SUCCES+1))
         else
         	color $RED"$1$WHI -- $YEL$result$WHI -- $duration"
         fi

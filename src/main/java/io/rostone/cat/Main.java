@@ -1,5 +1,6 @@
 package io.rostone.cat;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -9,6 +10,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import io.rostone.cat.antlr.CatLexer;
 import io.rostone.cat.antlr.CatParser;
+import io.rostone.cat.antlr.CatParser.AstContext;
 import io.rostone.cat.ast.Ast;
 
 public class Main {
@@ -24,14 +26,30 @@ public class Main {
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 CatParser parser = new CatParser(tokens);
 
-                Ast ast = parser.ast().node;
+                AstContext astContext = parser.ast();
+
+                Ast ast = astContext.node;
 
                 if (parser.getNumberOfSyntaxErrors() > 0) {
                     System.err.println("Compilation failed: Syntax errors found.");
                     System.exit(1);
                 }
 
-                //Ast.toHtml(ast, Path.of("ast.html"));
+                CatParser.AstContext tree = astContext;
+
+                // 1. Texte condensé (sans espaces masqués)
+                //System.out.println("Texte condensé : " + tree.getText());
+
+                try {
+                  FileWriter myWriter = new FileWriter(args[0] + ".txt");
+                  myWriter.write(tree.getText().substring(0, tree.getText().length() - 5));
+                  myWriter.close();
+                } catch (IOException e) {
+                  System.out.println("An error occurred.");
+                  e.printStackTrace();
+                }
+
+                Ast.toHtml(ast, Path.of("ast.html"));
         } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
