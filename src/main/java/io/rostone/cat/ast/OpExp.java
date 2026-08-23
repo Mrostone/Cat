@@ -1,5 +1,7 @@
 package io.rostone.cat.ast;
 
+import io.rostone.cat.binder.Binder;
+
 public class OpExp extends Exp{
     Exp left;
     Op op;
@@ -9,5 +11,11 @@ public class OpExp extends Exp{
         this.left = left;
         this.op = op;
         this.right = right;
+    }
+
+    @Override
+    public void bind(Binder bind) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bind'");
     }
 }
