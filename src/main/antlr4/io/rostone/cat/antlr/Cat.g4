@@ -45,6 +45,7 @@ var returns [ VarDec node]
 varList returns [ List<VarDec> list]
     @init { $list = new ArrayList<>(); }
     : v=var { $list.add($v.node); } (',' v=var { $list.add($v.node); })*
+    |
     ;
 
 op returns [Op value]
@@ -76,7 +77,7 @@ exp returns [Exp node]
     | STRING { $node = new StringExp(Utils.unescape($STRING.text)); }
     | t=type ID '=' e=exp { $node = new VarDec($ID.text, $t.node, $e.node); }
     | left=exp o=op right=exp { $node = new OpExp($left.node, $o.value, $right.node); }
-    | t=type ID '(' l=varList ')' '{' s=stmt '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node); }
+    | t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node); }
     | '(' e=exp ')'   { $node = $e.node; }
     | RETURN e=exp { $node = new ReturnExp($e.node); }
     ;
