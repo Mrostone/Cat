@@ -14,8 +14,9 @@ public class OpExp extends Exp{
     }
 
     @Override
-    public void bind(Binder bind) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bind'");
+    public Binder bind(Binder bind) {
+        bind = left.bind(bind);
+        bind = right.bind(bind);
+        return bind;
     }
 }
