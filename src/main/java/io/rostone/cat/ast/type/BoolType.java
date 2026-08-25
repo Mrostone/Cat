@@ -1,5 +1,16 @@
 package io.rostone.cat.ast.type;
 
-public class BoolType extends Type {
+public final class BoolType extends Type {
+    private static BoolType INSTANCE;
     
+    private BoolType() {        
+    }
+    
+    public static BoolType getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new BoolType();
+        }
+        
+        return INSTANCE;
+    }
 }

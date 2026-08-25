@@ -21,4 +21,13 @@ public class SeqExp extends Exp {
         }
         return bind;
     }
+
+    @Override
+    public void typeCheck() {
+        for(Exp e : list) {
+            e.typeCheck();
+        }
+
+        this.type = list.getLast().getType();
+    }
 }

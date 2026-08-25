@@ -12,6 +12,16 @@ public class ReturnExp extends Exp {
 
     @Override
     public Binder bind(Binder bind) {
+        if (exp == null) {
+            System.err.println("Error null");
+            System.exit(3);
+        }
         return exp.bind(bind);
+    }
+
+    @Override
+    public void typeCheck() {
+        exp.typeCheck();
+        this.type = exp.getType();
     }
 }

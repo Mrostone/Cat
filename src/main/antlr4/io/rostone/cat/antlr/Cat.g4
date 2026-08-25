@@ -32,10 +32,11 @@ stmt returns [Exp node]
 
 
 type returns [Type node]
-    : INT_NAME { $node = new IntType(); }
-    | FLOAT_NAME { $node = new FloatType(); }
-    | STRING_NAME { $node = new StringType(); }
-    | BOOL_NAME { $node = new BoolType(); }
+    : INT_NAME { $node = IntType.getInstance(); }
+    | FLOAT_NAME { $node = FloatType.getInstance(); }
+    | STRING_NAME { $node = StringType.getInstance(); }
+    | BOOL_NAME { $node = BoolType.getInstance(); }
+    | VOID_NAME { $node = VoidType.getInstance(); }
     ;
 
 var returns [ VarDec node]
@@ -89,6 +90,7 @@ INT_NAME : 'int';
 FLOAT_NAME : 'float';
 STRING_NAME : 'string';
 BOOL_NAME : 'bool';
+VOID_NAME : 'void';
 
 RETURN : 'return';
 

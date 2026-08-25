@@ -8,7 +8,7 @@ import io.rostone.cat.ast.var.VarDec;
 import io.rostone.cat.binder.Binder;
 
 public class FunctionDec extends Exp{
-    public Type type;
+    //public Type type;
     public String name;
     public List<VarDec> list;
     public Exp body;
@@ -25,7 +25,7 @@ public class FunctionDec extends Exp{
         try {
             bind.addFunc(name, this);
         } catch (Exception e) {
-            System.err.print(e.getMessage());
+            System.err.println(e.getMessage());
             System.exit(3);
         }
 
@@ -33,9 +33,26 @@ public class FunctionDec extends Exp{
         for (VarDec v : list) {
             bind = v.bind(bind);
         }
-        bind = body.bind(bind);
+        if (body != null) {
+            bind = body.bind(bind);
+        }
         bind.popVar();
 
         return bind;
+    }
+
+    @Override
+    public void typeCheck() {
+        for (VarDec v : list) {
+            v.typeCheck();
+        }
+        if (body != null) {
+            body.typeCheck();
+            if (body.getType() != this.type) {
+                System.err.println("Error type FuncDec");
+                System.err.println(body.getType() + " == " + this.type);
+                System.exit(4);
+            }
+        }
     }
 }

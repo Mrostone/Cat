@@ -1,1 +1,1 @@
-stringCompare("toto","tata");
+strCmp("toto","tata");

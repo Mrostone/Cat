@@ -12,6 +12,8 @@ import io.rostone.cat.antlr.CatLexer;
 import io.rostone.cat.antlr.CatParser;
 import io.rostone.cat.antlr.CatParser.AstContext;
 import io.rostone.cat.ast.Ast;
+import io.rostone.cat.binder.Binder;
+import io.rostone.cat.typecheck.TypeCheck;
 
 public class Main {
     public static void main(String[] args){
@@ -37,9 +39,6 @@ public class Main {
 
                 CatParser.AstContext tree = astContext;
 
-                // 1. Texte condensé (sans espaces masqués)
-                //System.out.println("Texte condensé : " + tree.getText());
-
                 try {
                   FileWriter myWriter = new FileWriter(args[0] + ".txt");
                   myWriter.write(tree.getText().substring(0, tree.getText().length() - 5));
@@ -48,6 +47,14 @@ public class Main {
                   System.out.println("An error occurred.");
                   e.printStackTrace();
                 }
+
+                Binder binder = new Binder(ast);
+
+                binder.bind();
+
+                TypeCheck typeCheck = new TypeCheck(ast);
+
+                typeCheck.typeCheck();
 
                 Ast.toHtml(ast, Path.of("ast.html"));
         } catch (IOException e) {
