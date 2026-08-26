@@ -10,6 +10,7 @@ import io.rostone.cat.ast.function.FunctionDec;
 import io.rostone.cat.ast.function.ReturnExp;
 import io.rostone.cat.ast.OpExp;
 import io.rostone.cat.ast.Op;
+import io.rostone.cat.utils.Position;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -834,7 +835,7 @@ public class CatParser extends Parser {
 					((ExpContext)_localctx).o = op();
 					setState(151);
 					((ExpContext)_localctx).right = exp(5);
-					 ((ExpContext)_localctx).node =  new OpExp(((ExpContext)_localctx).left.node, ((ExpContext)_localctx).o.value, ((ExpContext)_localctx).right.node); 
+					 ((ExpContext)_localctx).node =  new OpExp(((ExpContext)_localctx).left.node, ((ExpContext)_localctx).o.value, ((ExpContext)_localctx).right.node, new Position(_localctx.start.getLine(), _localctx.start.getCharPositionInLine())); 
 					}
 					} 
 				}

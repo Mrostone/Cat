@@ -3,16 +3,18 @@ package io.rostone.cat.ast;
 import io.rostone.cat.ast.type.IntType;
 import io.rostone.cat.ast.type.Type;
 import io.rostone.cat.binder.Binder;
+import io.rostone.cat.utils.Position;
 
 public class OpExp extends Exp{
     Exp left;
     Op op;
     Exp right;
 
-    public OpExp(Exp left, Op op, Exp right) {
+    public OpExp(Exp left, Op op, Exp right, Position pos) {
         this.left = left;
         this.op = op;
         this.right = right;
+        this.pos = pos;
     }
 
     @Override

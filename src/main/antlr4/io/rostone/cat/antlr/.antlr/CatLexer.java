@@ -10,6 +10,7 @@ import io.rostone.cat.ast.function.FunctionDec;
 import io.rostone.cat.ast.function.ReturnExp;
 import io.rostone.cat.ast.OpExp;
 import io.rostone.cat.ast.Op;
+import io.rostone.cat.utils.Position;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

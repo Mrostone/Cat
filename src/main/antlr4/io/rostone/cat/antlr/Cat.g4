@@ -13,6 +13,7 @@ import io.rostone.cat.ast.function.FunctionDec;
 import io.rostone.cat.ast.function.ReturnExp;
 import io.rostone.cat.ast.OpExp;
 import io.rostone.cat.ast.Op;
+import io.rostone.cat.utils.Position;
 }
 
 ast returns [Ast node]
@@ -77,7 +78,7 @@ exp returns [Exp node]
     | INT { $node = new IntExp($INT.text); }
     | STRING { $node = new StringExp(Utils.unescape($STRING.text)); }
     | t=type ID '=' e=exp { $node = new VarDec($ID.text, $t.node, $e.node); }
-    | left=exp o=op right=exp { $node = new OpExp($left.node, $o.value, $right.node); }
+    | left=exp o=op right=exp { $node = new OpExp($left.node, $o.value, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node); }
     | '(' e=exp ')'   { $node = $e.node; }
     | RETURN e=exp { $node = new ReturnExp($e.node); }
