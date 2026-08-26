@@ -10,6 +10,7 @@ import io.rostone.cat.ast.type.IntType;
 import io.rostone.cat.ast.type.StringType;
 import io.rostone.cat.ast.type.VoidType;
 import io.rostone.cat.ast.var.VarDec;
+import io.rostone.cat.utils.Position;
 
 public class Binder {
     Ast ast;
@@ -40,23 +41,23 @@ public class Binder {
 
         if (name.equals("print")) {
             ArrayList<VarDec> list = new ArrayList<>();
-            list.add(new VarDec("string", StringType.getInstance(), null));
-            FunctionDec func = new FunctionDec(VoidType.getInstance(), name, list, null);
+            list.add(new VarDec("string", StringType.getInstance(), null, new Position(0, 0)));
+            FunctionDec func = new FunctionDec(VoidType.getInstance(), name, list, null, new Position(0, 0));
             ast.exps.addFirst(func);
             return func;
         }
         else if (name.equals("exit")) {
             ArrayList<VarDec> list = new ArrayList<>();
-            list.add(new VarDec("number", IntType.getInstance(), null));
-            FunctionDec func = new FunctionDec(VoidType.getInstance(), name, list, null);
+            list.add(new VarDec("number", IntType.getInstance(), null, new Position(0, 0)));
+            FunctionDec func = new FunctionDec(VoidType.getInstance(), name, list, null, new Position(0, 0));
             ast.exps.addFirst(func);
             return func;
         }
         else if (name.equals("strCmp")) {
             ArrayList<VarDec> list = new ArrayList<>();
-            list.add(new VarDec("string1", StringType.getInstance(), null));
-            list.add(new VarDec("string2", StringType.getInstance(), null));
-            FunctionDec func = new FunctionDec(IntType.getInstance(), name, list, null);
+            list.add(new VarDec("string1", StringType.getInstance(), null, new Position(0, 0)));
+            list.add(new VarDec("string2", StringType.getInstance(), null, new Position(0, 0)));
+            FunctionDec func = new FunctionDec(IntType.getInstance(), name, list, null, new Position(0, 0));
             ast.exps.addFirst(func);
             return func;
         }

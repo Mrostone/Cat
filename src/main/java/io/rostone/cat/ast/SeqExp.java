@@ -3,11 +3,13 @@ package io.rostone.cat.ast;
 import java.util.ArrayList;
 
 import io.rostone.cat.binder.Binder;
+import io.rostone.cat.utils.Position;
 
 public class SeqExp extends Exp {
     ArrayList<Exp> list = new ArrayList<>();
 
-    public SeqExp() {
+    public SeqExp(Position pos) {
+        this.pos = pos;
     }
 
     public void add(Exp exp) {

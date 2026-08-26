@@ -3,16 +3,18 @@ package io.rostone.cat.ast.var;
 import io.rostone.cat.ast.Exp;
 import io.rostone.cat.ast.type.Type;
 import io.rostone.cat.binder.Binder;
+import io.rostone.cat.utils.ErrorHandler;
+import io.rostone.cat.utils.Position;
 
 public class VarDec extends Exp{
     public String name;
-    //public Type type;
     public Exp init;
 
-    public VarDec(String name, Type type, Exp init) {
+    public VarDec(String name, Type type, Exp init, Position pos) {
         this.name = name;
         this.type = type;
         this.init = init;
+        this.pos = pos;
     }
 
     @Override
@@ -20,8 +22,7 @@ public class VarDec extends Exp{
         try {
             bind.addVar(name, this);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.exit(3);
+            ErrorHandler.error(this, 3, e.getMessage());
         }
         if (init != null) {
             return init.bind(bind);
@@ -34,8 +35,7 @@ public class VarDec extends Exp{
             init.typeCheck();
             Type t = init.getType();
             if (t != this.type) {
-                System.err.println("Error type VarDec");
-                System.exit(4);
+                ErrorHandler.error(this, 4, "error type var got : " + this.type + " excpected : " + t);
             }
         }
     }

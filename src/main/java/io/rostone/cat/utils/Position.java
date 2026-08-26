@@ -10,6 +10,6 @@ public class Position {
     }
 
     public String print() {
-        return "Start : " + startLine + ":" + startChar;
+        return startLine + ":" + startChar;
     }
 }

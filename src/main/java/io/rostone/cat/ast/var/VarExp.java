@@ -3,13 +3,16 @@ package io.rostone.cat.ast.var;
 import io.rostone.cat.ast.Exp;
 import io.rostone.cat.ast.type.Type;
 import io.rostone.cat.binder.Binder;
+import io.rostone.cat.utils.ErrorHandler;
+import io.rostone.cat.utils.Position;
 
 public class VarExp extends Exp {
     public String name;
     public VarDec var;
 
-    public VarExp(String name) {
+    public VarExp(String name, Position pos) {
         this.name = name;
+        this.pos = pos;
     }
 
     @Override
@@ -17,8 +20,7 @@ public class VarExp extends Exp {
         try {
             var = bind.getVar(name);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.exit(3);
+            ErrorHandler.error(this, 3, e.getMessage());
         }
 
         return bind;

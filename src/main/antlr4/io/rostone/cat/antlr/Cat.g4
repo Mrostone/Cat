@@ -22,7 +22,7 @@ ast returns [Ast node]
     ;
 
 seqExp returns [SeqExp node]
-    @init { $node = new SeqExp(); }
+    @init { $node = new SeqExp(new Position($start.getLine(), $start.getCharPositionInLine())); }
     : (s=stmt { $node.add($s.node); })+
     ;
 
@@ -41,7 +41,7 @@ type returns [Type node]
     ;
 
 var returns [ VarDec node]
-    : t=type ID { $node = new VarDec($ID.text, $t.node, null); }
+    : t=type ID { $node = new VarDec($ID.text, $t.node, null, new Position($start.getLine(), $start.getCharPositionInLine())); }
     ;
 
 varList returns [ List<VarDec> list]
@@ -50,38 +50,58 @@ varList returns [ List<VarDec> list]
     |
     ;
 
-op returns [Op value]
-    : '+'  { $value = Op.add; }
-    | '-'  { $value = Op.sub; }
-    | '*'  { $value = Op.mul; }
-    | '/'  { $value = Op.div; }
-    | '='  { $value = Op.eq; }
-    | '<>' { $value = Op.ne; }
-    | '<'  { $value = Op.lt; }
-    | '<=' { $value = Op.le; }
-    | '>'  { $value = Op.gt; }
-    | '>=' { $value = Op.ge; }
-    ;
-
 argList returns [List<Exp> list]
     @init { $list = new ArrayList<>(); }
     : e=exp { $list.add($e.node); } (',' e=exp { $list.add($e.node); })*
     ;
 
 callExp returns [CallExp node]
-    : ID '(' a=argList? ')' { $node = new CallExp($ID.text, ($a.ctx != null) ? $a.list : new ArrayList<>(), null); } 
+    : ID '(' a=argList? ')' { $node = new CallExp($ID.text, ($a.ctx != null) ? $a.list : new ArrayList<>(), null, new Position($start.getLine(), $start.getCharPositionInLine())); } 
+    ;
+
+varDec returns [VarDec node]
+    : t=type ID '=' e=exp { $node = new VarDec($ID.text, $t.node, $e.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    ;
+
+for returns [ForExp node]
+    : 'for' '(' v=varDec ';' o=exp ';' e=exp ')' '{' b=seqExp '}' { $node = new ForExp($v.node, $o.node, $e.node, $b.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     ;
 
 exp returns [Exp node]
-    : c=callExp { $node = $c.node; }
-    | ID { $node = new VarExp($ID.text); }
-    | INT { $node = new IntExp($INT.text); }
-    | STRING { $node = new StringExp(Utils.unescape($STRING.text)); }
-    | t=type ID '=' e=exp { $node = new VarDec($ID.text, $t.node, $e.node); }
-    | left=exp o=op right=exp { $node = new OpExp($left.node, $o.value, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
-    | t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node); }
-    | '(' e=exp ')'   { $node = $e.node; }
-    | RETURN e=exp { $node = new ReturnExp($e.node); }
+    : t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | v=varDec { $node = $v.node; }
+    | f=for { $node = $f.node; }
+    | RETURN e=exp { $node = new ReturnExp($e.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | left=exp op=('*' | '/') right=exp 
+        { 
+          Op o = $op.text.equals("*") ? Op.mul : Op.div;
+          $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
+        }
+    | left=exp op=('+' | '-') right=exp 
+        { 
+          Op o = $op.text.equals("+") ? Op.add : Op.sub;
+          $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
+        }
+    | left=exp op=('<' | '<=' | '>' | '>=') right=exp 
+        { 
+          Op o = switch ($op.text) {
+              case "<"  -> Op.lt;
+              case "<=" -> Op.le;
+              case ">"  -> Op.gt;
+              default   -> Op.ge;
+          };
+          $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
+        }
+    | left=exp op=('=' | '<>') right=exp 
+        { 
+          Op o = $op.text.equals("=") ? Op.eq : Op.ne;
+          $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
+        }
+    | c=callExp { $node = $c.node; }
+    | ID { $node = new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | INT { $node = new IntExp($INT.text, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | STRING { $node = new StringExp(Utils.unescape($STRING.text), new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | '(' e=exp ')' { $node = $e.node; }
     ;
 
 

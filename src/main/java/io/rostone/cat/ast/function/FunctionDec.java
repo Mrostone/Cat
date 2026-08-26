@@ -6,18 +6,20 @@ import io.rostone.cat.ast.Exp;
 import io.rostone.cat.ast.type.Type;
 import io.rostone.cat.ast.var.VarDec;
 import io.rostone.cat.binder.Binder;
+import io.rostone.cat.utils.ErrorHandler;
+import io.rostone.cat.utils.Position;
 
 public class FunctionDec extends Exp{
-    //public Type type;
     public String name;
     public List<VarDec> list;
     public Exp body;
 
-    public FunctionDec(Type type, String name, List<VarDec> list, Exp body){
+    public FunctionDec(Type type, String name, List<VarDec> list, Exp body, Position pos){
         this.type = type;
         this.name = name;
         this.list = list;
         this.body = body;
+        this.pos = pos;
     }
 
     @Override
@@ -25,8 +27,7 @@ public class FunctionDec extends Exp{
         try {
             bind.addFunc(name, this);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.exit(3);
+            ErrorHandler.error(this, 3, e.getMessage());
         }
 
         bind.newVar();
@@ -49,9 +50,7 @@ public class FunctionDec extends Exp{
         if (body != null) {
             body.typeCheck();
             if (body.getType() != this.type) {
-                System.err.println("Error type FuncDec");
-                System.err.println(body.getType() + " == " + this.type);
-                System.exit(4);
+                ErrorHandler.error(this, 4, "type body different from type function " + this.type + " and " + body.getType());
             }
         }
     }

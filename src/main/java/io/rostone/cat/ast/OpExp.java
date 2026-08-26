@@ -3,6 +3,7 @@ package io.rostone.cat.ast;
 import io.rostone.cat.ast.type.IntType;
 import io.rostone.cat.ast.type.Type;
 import io.rostone.cat.binder.Binder;
+import io.rostone.cat.utils.ErrorHandler;
 import io.rostone.cat.utils.Position;
 
 public class OpExp extends Exp{
@@ -40,10 +41,15 @@ public class OpExp extends Exp{
         Type l = left.getType();
         Type r = left.getType();
 
-        if (l != IntType.getInstance() || r != IntType.getInstance() || l != r) {
-            System.err.println("Error type OpExp");
-            System.err.println(l + " == " + r);
-            System.exit(4);
+        if (l != IntType.getInstance()) {
+            ErrorHandler.error(this, 4, "Error left expretion not an int : " + l.getClass());
+        }
+        if (r != IntType.getInstance()) {
+            ErrorHandler.error(this, 4, "Error right expretion not an int : " + r.getClass());
+        }
+
+        if (!l.verify(r)) {
+            ErrorHandler.error(this, 4, "Type not compatible : " + l.getClass() + " and " + r.getClass());
         }
 
         this.type = l;
