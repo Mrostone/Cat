@@ -42,7 +42,7 @@ public class CallExp extends Exp {
         if (args.size() != functionDec.list.size()) {
             ErrorHandler.error(this, 4, "number argument invalid got : " +args.size() + "excpected : " + functionDec.list.size());
         }
-        for (int i = 0; i <= args.size(); i++) {
+        for (int i = 0; i < args.size(); i++) {
             args.get(i).typeCheck();
             if (args.get(i).getType() != functionDec.list.get(i).getType()) {
                 ErrorHandler.error(this, 4, "argument " + i + "invalid type : " + args.get(i).getType() + " excpected : " + functionDec.list.get(i).getType());

@@ -1,6 +1,5 @@
 package io.rostone.cat.ast;
 
-import io.rostone.cat.ast.type.VoidType;
 import io.rostone.cat.ast.var.VarDec;
 import io.rostone.cat.binder.Binder;
 import io.rostone.cat.utils.Position;

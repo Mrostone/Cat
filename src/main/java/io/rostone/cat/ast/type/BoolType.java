@@ -13,4 +13,9 @@ public final class BoolType extends Type {
         
         return INSTANCE;
     }
+
+    @Override
+    public String toString(){
+        return "BoolType";
+    }
 }

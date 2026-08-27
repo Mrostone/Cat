@@ -1,5 +1,6 @@
 package io.rostone.cat.utils;
 
+@AstIgnore
 public class Position {
     int startLine;
     int startChar;

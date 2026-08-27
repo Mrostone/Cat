@@ -13,4 +13,9 @@ public final class StringType extends Type {
         
         return INSTANCE;
     }
+
+    @Override
+    public String toString(){
+        return "StringType";
+    }
 }

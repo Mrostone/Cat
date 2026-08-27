@@ -82,6 +82,8 @@ exp returns [Exp node]
           Op o = $op.text.equals("+") ? Op.add : Op.sub;
           $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
         }
+    | ID '++' { $node = new AssignExp(new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())), new OpExp(new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())), Op.add, new IntExp("1", new Position($start.getLine(), $start.getCharPositionInLine())), new Position($start.getLine(), $start.getCharPositionInLine())), new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | ID '--' { $node = new AssignExp(new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())), new OpExp(new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())), Op.sub, new IntExp("1", new Position($start.getLine(), $start.getCharPositionInLine())), new Position($start.getLine(), $start.getCharPositionInLine())), new Position($start.getLine(), $start.getCharPositionInLine())); }
     | left=exp op=('<' | '<=' | '>' | '>=') right=exp 
         { 
           Op o = switch ($op.text) {
@@ -92,11 +94,12 @@ exp returns [Exp node]
           };
           $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
         }
-    | left=exp op=('=' | '<>') right=exp 
+    | left=exp op=('==' | '!=') right=exp 
         { 
           Op o = $op.text.equals("=") ? Op.eq : Op.ne;
           $node = new OpExp($left.node, o, $right.node, new Position($start.getLine(), $start.getCharPositionInLine())); 
         }
+    | ID '=' e=exp { $node = new AssignExp(new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())), $e.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | c=callExp { $node = $c.node; }
     | ID { $node = new VarExp($ID.text, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | INT { $node = new IntExp($INT.text, new Position($start.getLine(), $start.getCharPositionInLine())); }

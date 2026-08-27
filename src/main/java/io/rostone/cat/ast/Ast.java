@@ -14,11 +14,18 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.rostone.cat.utils.AstIgnore;
+import io.rostone.cat.utils.Position;
+
 public class Ast {
     public ArrayList<Exp> exps = new ArrayList<>();
     // DONE by Claude to not lose time on dumper dot ==========
     private transient final IdentityHashMap<Object, Integer> visited = new IdentityHashMap<>();
     private transient int nextId = 0;
+
+    private static final java.util.Set<Class<?>> IGNORED_CLASSES = java.util.Set.of(
+      Position.class // Ajoutez vos autres classes ici
+    );
 
     public Ast(){
     }
@@ -31,8 +38,11 @@ public class Ast {
         if (obj == null) {
             return "null";
         }
- 
 
+        if (IGNORED_CLASSES.contains(obj.getClass())) {
+          return "null";
+        }
+ 
         if (obj instanceof Number || obj instanceof Boolean) {
             return obj.toString();
         }
@@ -99,6 +109,10 @@ public class Ast {
             if (Modifier.isStatic(mods) || Modifier.isTransient(mods)) {
                 continue;
             }
+            if (f.isAnnotationPresent(AstIgnore.class) || f.getType().isAnnotationPresent(AstIgnore.class)) {
+              continue;
+            }
+
             f.setAccessible(true);
             Object value;
             try {
@@ -106,6 +120,13 @@ public class Ast {
             } catch (IllegalAccessException | RuntimeException e) {
                 continue;
             }
+            if ("type".equals(f.getName()) && value != null) {
+                sb.append(",\n")
+                  .append(pad).append(quote(f.getName())).append(": ")
+                  .append(quote(value.toString()));
+                continue;
+            }
+
             sb.append(",\n")
               .append(pad).append(quote(f.getName())).append(": ")
               .append(dump(value, indent + 1));
@@ -218,7 +239,7 @@ __VIZ_TAG__
   function fmtScalar(v){if(v===null)return "null";if(typeof v==="string")return '"'+v+'"';return String(v);}
   function scalarArray(a){return a.every(function(x){return x===null||typeof x!=="object";});}
  
-  var C={hdr:"#2d3b52",id:"#8aa0c0",str:"#4a9d6a",num:"#c08a3e",nul:"#7a8aa0",ref:"#c07a7a"};
+  var C={hdr:"#2d3b52",id:"#8aa0c0",str:"#4a9d6a",num:"#c08a3e",nul:"#7a8aa0",ref:"#c07a7a",key: "#ffffff"};
  
   function toDot(root){
     var nodes=[], edges=[], done={}, auto=-1;
@@ -228,33 +249,38 @@ __VIZ_TAG__
       if(done[id])return; done[id]=1;
       var type=o._type||"object", rows="", port=0;
       rows+='<tr><td bgcolor="'+C.hdr+'" port="__h"><font color="#ffffff"><b>'+escHtml(type)+'</b></font><font color="'+C.id+'">  #'+o._id+'</font></td></tr>';
-      Object.keys(o).forEach(function(key){
-        if(key==="_id"||key==="_type")return;
-        var val=o[key];
-        if(isRef(val)){
-          var p="p"+(port++);
-          rows+='<tr><td align="left" port="'+p+'">'+escHtml(key)+' <font color="'+C.ref+'">&#8594; #'+val._ref+'</font></td></tr>';
-          edges.push("  "+id+":"+p+" -> n"+val._ref+' [style=dashed,color="'+C.ref+'",constraint=false];');
-        }else if(isNode(val)){
-          var p2="p"+(port++);
-          rows+='<tr><td align="left" port="'+p2+'">'+escHtml(key)+'</td></tr>';
-          edges.push("  "+id+":"+p2+" -> "+nid(val)+";"); emit(val);
-        }else if(Array.isArray(val)){
-          if(val.length===0){
-            rows+='<tr><td align="left">'+escHtml(key)+' <font color="'+C.nul+'">= []</font></td></tr>';
-          }else if(scalarArray(val)){
-            rows+='<tr><td align="left">'+escHtml(key)+' <font color="'+C.str+'">= ['+escHtml(val.map(fmtScalar).join(", "))+']</font></td></tr>';
-          }else{
-            var p3="p"+(port++);
-            rows+='<tr><td align="left" port="'+p3+'">'+escHtml(key)+' <font color="'+C.nul+'">['+val.length+']</font></td></tr>';
-            val.forEach(function(item,i){
-              if(isRef(item)) edges.push("  "+id+":"+p3+" -> n"+item._ref+' [label="'+i+'",style=dashed,color="'+C.ref+'",constraint=false];');
-              else if(isNode(item)){ edges.push("  "+id+":"+p3+" -> "+nid(item)+' [label="'+i+'"];'); emit(item); }
+      Object.keys(o).forEach(function(key) {
+        if (key === "_id" || key === "_type") return;
+        var val = o[key];
+      
+        // Helper pour formater la clé en blanc
+        var keyHtml = '<font color="' + C.key + '">' + escHtml(key) + '</font>';
+      
+        if (isRef(val)) {
+          var p = "p" + (port++);
+          rows += '<tr><td align="left" port="' + p + '">' + keyHtml + ' <font color="' + C.ref + '">&#8594; #' + val._ref + '</font></td></tr>';
+          edges.push("  " + id + ":" + p + " -> n" + val._ref + ' [style=dashed,color="' + C.ref + '",constraint=false];');
+        } else if (isNode(val)) {
+          var p2 = "p" + (port++);
+          rows += '<tr><td align="left" port="' + p2 + '">' + keyHtml + '</td></tr>';
+          edges.push("  " + id + ":" + p2 + " -> " + nid(val) + ";");
+          emit(val);
+        } else if (Array.isArray(val)) {
+          if (val.length === 0) {
+            rows += '<tr><td align="left">' + keyHtml + ' <font color="' + C.nul + '">= []</font></td></tr>';
+          } else if (scalarArray(val)) {
+            rows += '<tr><td align="left">' + keyHtml + ' <font color="' + C.str + '">= [' + escHtml(val.map(fmtScalar).join(", ")) + ']</font></td></tr>';
+          } else {
+            var p3 = "p" + (port++);
+            rows += '<tr><td align="left" port="' + p3 + '">' + keyHtml + ' <font color="' + C.nul + '">[' + val.length + ']</font></td></tr>';
+            val.forEach(function(item, i) {
+              if (isRef(item)) edges.push("  " + id + ":" + p3 + " -> n" + item._ref + ' [label="' + i + '",style=dashed,color="' + C.ref + '",constraint=false];');
+              else if (isNode(item)) { edges.push("  " + id + ":" + p3 + " -> " + nid(item) + ' [label="' + i + '"];'); emit(item); }
             });
           }
-        }else{
-          var col=val===null?C.nul:(typeof val==="string"?C.str:C.num);
-          rows+='<tr><td align="left">'+escHtml(key)+' <font color="'+col+'">= '+escHtml(fmtScalar(val))+'</font></td></tr>';
+        } else {
+          var col = val === null ? C.nul : (typeof val === "string" ? C.str : C.num);
+          rows += '<tr><td align="left">' + keyHtml + ' <font color="' + col + '">= ' + escHtml(fmtScalar(val)) + '</font></td></tr>';
         }
       });
       nodes.push("  "+id+' [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="6">'+rows+'</table>>];');

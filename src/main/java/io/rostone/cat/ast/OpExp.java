@@ -41,15 +41,18 @@ public class OpExp extends Exp{
         Type l = left.getType();
         Type r = left.getType();
 
-        if (l != IntType.getInstance()) {
-            ErrorHandler.error(this, 4, "Error left expretion not an int : " + l.getClass());
+        if (op.equals(Op.add) || op.equals(Op.sub) || op.equals(Op.mul) || op.equals(Op.div)) {
+            if (l != IntType.getInstance()) {
+                ErrorHandler.error(this, 4, "Error left expretion not an int : " + l.getClass());
+            }
+            if (r != IntType.getInstance()) {
+                ErrorHandler.error(this, 4, "Error right expretion not an int : " + r.getClass());
+            }
         }
-        if (r != IntType.getInstance()) {
-            ErrorHandler.error(this, 4, "Error right expretion not an int : " + r.getClass());
-        }
-
-        if (!l.verify(r)) {
-            ErrorHandler.error(this, 4, "Type not compatible : " + l.getClass() + " and " + r.getClass());
+        else if (op.equals(Op.eq) || op.equals(Op.ge) || op.equals(Op.gt) || op.equals(Op.le) || op.equals(Op.lt) || op.equals(Op.ne)) {
+            if (!l.verify(r)) {
+                ErrorHandler.error(this, 4, "Type not compatible : " + l.getClass() + " and " + r.getClass());
+            }
         }
 
         this.type = l;

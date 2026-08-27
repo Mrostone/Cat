@@ -1,6 +1,7 @@
 package io.rostone.cat.typecheck;
 
 import io.rostone.cat.ast.Ast;
+import io.rostone.cat.ast.Exp;
 
 public class TypeCheck {
     Ast ast;
@@ -10,6 +11,8 @@ public class TypeCheck {
     }
 
     public void typeCheck(){
-        ast.exps.getFirst().typeCheck();
+        for (Exp e : ast.exps) {
+            e.typeCheck();
+        }
     }
 }

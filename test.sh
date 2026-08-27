@@ -25,13 +25,14 @@ testParse()
 	if [ "$result" = "$expect" ]; then
 		color $GRN"$1$WHI -- $duration"
                 SUCCES=$((SUCCES+1))
-		rm "$1.txt"
+		rm -f "$1.txt"
         else
                 color $RED"$1$WHI --$YEL different parse$WHI -- $duration"
 		echo $result
 		echo "--"
 		echo $expect
 	fi
+	rm -f ast.html
 }
 
 file()
