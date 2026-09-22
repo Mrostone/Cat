@@ -17,8 +17,6 @@ color()
 
 color $PUR"COMPILING..."
 
-export MAVEN_OPTS="--sun-misc-unsafe-memory-access=allow"
-
 mvn clean package -q
 
 if [ $? -eq 0 ]; then
