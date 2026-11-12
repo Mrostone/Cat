@@ -18,12 +18,48 @@ import io.rostone.cat.typecheck.TypeCheck;
 public class Main {
     public static void main(String[] args){
         if(args.length == 0){
-            System.out.println("No args given");
+            System.err.println("No args given");
             return;
+        }
+        String file = "";
+        boolean displayAst = false;
+        boolean txtParse = false;
+        String fileAst = "ast.html";
+        for (int i = 0; i < args.length; i++)
+        {
+            String arg = args[i];
+            switch (arg) {
+                case "-a":
+                        displayAst = true;
+                        if(i + 2 < args.length)
+                        {
+                            fileAst = args[i + 1];
+                            i++;
+                        }
+                    break;
+                case "--txt":
+                        txtParse = true;
+                        if(i + 2 < args.length)
+                        {
+                            fileAst = args[i + 1];
+                            i++;
+                        }
+                    break;
+                default:
+                    if (arg.startsWith("-"))
+                    {
+                        System.err.println("Unkown option");
+                    }
+                    else
+                    {
+                        file = arg;
+                    }
+                    break;
+            }
         }
         CharStream input;
         try {
-                input = CharStreams.fromFileName(args[0]);
+                input = CharStreams.fromFileName(file);
                 CatLexer lexer = new CatLexer(input);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 CatParser parser = new CatParser(tokens);
@@ -37,15 +73,17 @@ public class Main {
                     System.exit(1);
                 }
 
-                CatParser.AstContext tree = astContext;
-
-                try {
-                  FileWriter myWriter = new FileWriter(args[0] + ".txt");
-                  myWriter.write(tree.getText().substring(0, tree.getText().length() - 5));
-                  myWriter.close();
-                } catch (IOException e) {
-                  System.out.println("An error occurred.");
-                  e.printStackTrace();
+                if (txtParse)
+                {
+                    CatParser.AstContext tree = astContext;
+                    try {
+                      FileWriter myWriter = new FileWriter(file + ".txt");
+                      myWriter.write(tree.getText().substring(0, tree.getText().length() - 5));
+                      myWriter.close();
+                    } catch (IOException e) {
+                      System.out.println("An error occurred.");
+                      e.printStackTrace();
+                    }
                 }
 
                 Binder binder = new Binder(ast);
@@ -56,7 +94,10 @@ public class Main {
 
                 typeCheck.typeCheck();
 
-                //Ast.toHtml(ast, Path.of("ast.html"));
+                if(displayAst)
+                {
+                    Ast.toHtml(ast, Path.of(fileAst));
+                }
         } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
