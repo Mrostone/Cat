@@ -27,7 +27,7 @@ public class CallExp extends Exp {
         try {
             functionDec = bind.getFunc(name);
         } catch (Exception e) {
-            ErrorHandler.error(this, 4, e.getMessage());
+            ErrorHandler.error(this, 3, e.getMessage());
         }
 
         for (Exp e : args) {

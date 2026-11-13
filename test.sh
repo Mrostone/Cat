@@ -161,6 +161,6 @@ cd type
 test_dir_error 4
 cd ..
 
-color "\n$PUR======== $SUCCES / $TOTAL ========"
+color "\n$PUR======== $CYA$SUCCES / $TOTAL $PUR========"
 
 cd $HOME_PWD

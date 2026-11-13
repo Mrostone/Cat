@@ -98,7 +98,7 @@ public class Binder {
             }
         }
 
-        throw new Exception("No function " + name + " in scope");
+        throw new Exception("No function '" + name + "' in scope");
     }
 
     public void newVar() {
