@@ -19,6 +19,10 @@ public class VarExp extends Exp {
     public Binder bind(Binder bind) {
         try {
             var = bind.getVar(name);
+            if (var == null)
+            {
+                ErrorHandler.error(this, 3, "No var '" + name + "' in scope");
+            }
         } catch (Exception e) {
             ErrorHandler.error(this, 3, e.getMessage());
         }

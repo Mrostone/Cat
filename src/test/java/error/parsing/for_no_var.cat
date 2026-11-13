@@ -1,0 +1,5 @@
+void foo() {
+    for(i < 5; i++) {
+        print("bar");
+    };
+};
