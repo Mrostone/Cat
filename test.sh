@@ -47,7 +47,7 @@ testParse()
 test_file_error()
 {
 	t1=$(date +%s%N)
-	java -jar "${HOME_PWD}/target/cat-1.0-SNAPSHOT.jar" $1 >> /tmp/cat_compiler_tests 2>&1
+	java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1 >> /tmp/cat_compiler_tests 2>&1
 	result=$?
 	t2=$(date +%s%N)
 	diff_ms=$(( (t2 - t1) / 1000000 ))
@@ -65,7 +65,7 @@ test_file_error()
 test_file()
 {
 	t1=$(date +%s%N)
-	java -jar "${HOME_PWD}/target/cat-1.0-SNAPSHOT.jar" $1 --txt >> /tmp/cat_compiler_tests 2>&1
+	java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1 --txt >> /tmp/cat_compiler_tests 2>&1
 	result=$?
 	t2=$(date +%s%N)
 	diff_ms=$(( (t2 - t1) / 1000000 ))
@@ -103,7 +103,7 @@ test_dir_error() {
 			cd $dir
 			test_dir_error
 			cd ..
-		elif [[ "$dir" == *.cat ]]; then
+		elif [[ "$dir" == *.kot ]]; then
 			TOTAL=$((TOTAL+1))
 			test_file_error $dir $1
     		fi
@@ -118,7 +118,7 @@ test_dir_valid() {
 			cd $dir
 			test_dir_valid
 			cd ..
-		elif [[ "$dir" == *.cat ]]; then
+		elif [[ "$dir" == *.kot ]]; then
 			TOTAL=$((TOTAL+1))
 			test_file $dir
     		fi

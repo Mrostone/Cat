@@ -1,0 +1,133 @@
+package kot.binder;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import kot.ast.Ast;
+import kot.ast.Exp;
+import kot.ast.function.FunctionDec;
+import kot.ast.type.IntType;
+import kot.ast.type.StringType;
+import kot.ast.type.VoidType;
+import kot.ast.var.VarDec;
+import kot.utils.Position;
+
+public class Binder {
+    Ast ast;
+    public ArrayList<HashMap<String,FunctionDec>> function = new ArrayList<>();
+    public ArrayList<HashMap<String,VarDec>> var = new ArrayList<>();
+
+    public Binder(Ast ast) {
+        this.ast = ast;
+    }
+
+    public void bind(){
+        newFunc();
+        newVar();
+        ast.exps.getFirst().bind(this);
+    }
+
+    //PRIMITIVES
+
+    public FunctionDec getPrimitive(String name) {
+        for (Exp e : ast.exps) {
+            if (e instanceof FunctionDec) {
+                FunctionDec f = (FunctionDec) e;
+                if (f.name == name) {
+                    return f;
+                }
+            }
+        }
+
+        if (name.equals("print")) {
+            ArrayList<VarDec> list = new ArrayList<>();
+            list.add(new VarDec("string", StringType.getInstance(), null, new Position(0, 0)));
+            FunctionDec func = new FunctionDec(VoidType.getInstance(), name, list, null, new Position(0, 0));
+            ast.exps.addFirst(func);
+            return func;
+        }
+        else if (name.equals("exit")) {
+            ArrayList<VarDec> list = new ArrayList<>();
+            list.add(new VarDec("number", IntType.getInstance(), null, new Position(0, 0)));
+            FunctionDec func = new FunctionDec(VoidType.getInstance(), name, list, null, new Position(0, 0));
+            ast.exps.addFirst(func);
+            return func;
+        }
+        else if (name.equals("strCmp")) {
+            ArrayList<VarDec> list = new ArrayList<>();
+            list.add(new VarDec("string1", StringType.getInstance(), null, new Position(0, 0)));
+            list.add(new VarDec("string2", StringType.getInstance(), null, new Position(0, 0)));
+            FunctionDec func = new FunctionDec(IntType.getInstance(), name, list, null, new Position(0, 0));
+            ast.exps.addFirst(func);
+            return func;
+        }
+        return null;
+    }
+
+    // FUNCTIONS
+
+    public void newFunc() {
+        function.add(new HashMap<>());
+    }
+
+    public void popFunc() {
+        function.removeLast();
+    }
+
+    public void addFunc(String name, FunctionDec func) throws Exception {
+        if (function.size() == 0) {
+            throw new Exception("No scope for function");
+        }
+
+        function.getLast().put(name, func);
+    }
+
+    public FunctionDec getFunc(String name) throws Exception {
+        FunctionDec primitive = getPrimitive(name);
+        if (primitive != null) {
+            return primitive;
+        }
+
+        if (function.size() == 0) {
+            throw new Exception("No scope for function");
+        }
+
+        for (HashMap<String, FunctionDec> h : function.reversed()) {
+            if (h.containsKey(name)) {
+                return h.get(name);
+            }
+        }
+
+        throw new Exception("No function '" + name + "' in scope");
+    }
+
+    public void newVar() {
+        var.add(new HashMap<>());
+    }
+
+    public void popVar() {
+        var.removeLast();
+    }
+
+    public void addVar(String name,VarDec exp) throws Exception {
+        if (var.size() == 0) {
+            throw new Exception("No scope for var");
+        }
+
+        var.getLast().put(name, exp);
+    }
+
+    public VarDec getVar(String name) throws Exception {
+        if (var.size() == 0) {
+            throw new Exception("No scope for var");
+        }
+
+        for (HashMap<String,VarDec> h : var.reversed()) {
+            if (h.containsKey(name)) {
+                return h.get(name);
+            }
+        }
+
+        return null;
+    }
+}

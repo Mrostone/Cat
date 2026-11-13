@@ -29,7 +29,7 @@ fi
 color $PUR"Running on file : $1"
 
 t1=$(date +%s%N)
-java -jar "${HOME_PWD}/target/cat-1.0-SNAPSHOT.jar" $1
+java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1
 result=$?
 t2=$(date +%s%N)
 diff_ms=$(( (t2 - t1) / 1000000 ))

@@ -1,2 +1,2 @@
-# Cat
+# Kot
 An other programming language
