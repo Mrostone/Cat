@@ -54,4 +54,9 @@ public class ForExp extends Exp {
 
         this.type = body.getType();
     }
+
+    @Override
+    public void clean() {
+        body.clean();
+    }
 }

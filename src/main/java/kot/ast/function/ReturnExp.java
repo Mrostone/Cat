@@ -26,4 +26,9 @@ public class ReturnExp extends Exp {
         exp.typeCheck();
         this.type = exp.getType();
     }
+
+    @Override
+    public void clean() {
+        exp.clean();
+    }
 }

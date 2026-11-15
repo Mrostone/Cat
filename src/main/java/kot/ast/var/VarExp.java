@@ -27,6 +27,8 @@ public class VarExp extends Exp {
             ErrorHandler.error(this, 3, e.getMessage());
         }
 
+        var.isUsed = true;
+
         return bind;
     }
 

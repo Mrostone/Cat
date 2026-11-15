@@ -19,4 +19,8 @@ public abstract class Exp {
     public Type getType() {
         return type;
     }
+
+    public void clean() {
+        return;
+    }
 }

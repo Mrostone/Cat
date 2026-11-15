@@ -2,6 +2,8 @@ package kot.ast;
 
 import java.util.ArrayList;
 
+import kot.ast.function.FunctionDec;
+import kot.ast.var.VarDec;
 import kot.binder.Binder;
 import kot.utils.Position;
 
@@ -31,5 +33,35 @@ public class SeqExp extends Exp {
         }
 
         this.type = list.getLast().getType();
+    }
+
+    @Override
+    public void clean() {
+        ArrayList<Exp> toRemove = new ArrayList<Exp>();
+        for(Exp e : list) {
+            if (e instanceof FunctionDec) {
+                FunctionDec functionDec = (FunctionDec) e;
+                if (!functionDec.isUsed) {
+                    toRemove.add(e);
+                }
+                else {
+                    e.clean();
+                }
+            }
+            else if (e instanceof VarDec) {
+                VarDec varDec = (VarDec) e;
+                if (!varDec.isUsed) {
+                    toRemove.add(e);
+                }
+                else {
+                    e.clean();
+                }
+            }
+            else {
+                e.clean();
+            }
+        }
+
+        list.removeAll(toRemove);
     }
 }

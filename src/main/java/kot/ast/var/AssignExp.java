@@ -46,4 +46,9 @@ public class AssignExp extends Exp {
 
         this.type = VoidType.getInstance();
     }
+
+    @Override
+    public void clean() {
+        exp.clean();
+    }
 }

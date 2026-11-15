@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import kot.ast.Ast;
 import kot.ast.Exp;
+import kot.ast.SeqExp;
 import kot.ast.function.FunctionDec;
 import kot.ast.type.IntType;
 import kot.ast.type.StringType;
@@ -25,6 +26,16 @@ public class Binder {
         newFunc();
         newVar();
         ast.exps.getFirst().bind(this);
+        clean();
+    }
+
+    public void clean() {
+        for (Exp exp : ast.exps) {
+            if (exp instanceof SeqExp) {
+                SeqExp seq = (SeqExp) exp;
+                seq.clean();
+            }
+        }
     }
 
     //PRIMITIVES

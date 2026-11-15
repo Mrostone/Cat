@@ -9,12 +9,14 @@ import kot.utils.Position;
 public class VarDec extends Exp{
     public String name;
     public Exp init;
+    public boolean isUsed;
 
     public VarDec(String name, Type type, Exp init, Position pos) {
         this.name = name;
         this.type = type;
         this.init = init;
         this.pos = pos;
+        this.isUsed = false;
     }
 
     @Override

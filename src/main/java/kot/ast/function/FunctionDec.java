@@ -13,6 +13,7 @@ public class FunctionDec extends Exp{
     public String name;
     public List<VarDec> list;
     public Exp body;
+    public boolean isUsed;
 
     public FunctionDec(Type type, String name, List<VarDec> list, Exp body, Position pos){
         this.type = type;
@@ -20,6 +21,7 @@ public class FunctionDec extends Exp{
         this.list = list;
         this.body = body;
         this.pos = pos;
+        this.isUsed = false;
     }
 
     @Override
@@ -52,6 +54,13 @@ public class FunctionDec extends Exp{
             if (body.getType() != this.type) {
                 ErrorHandler.error(this, 4, "type body different from type function " + this.type + " and " + body.getType());
             }
+        }
+    }
+
+    @Override
+    public void clean() {
+        if (body != null) {
+            body.clean();
         }
     }
 }

@@ -34,6 +34,8 @@ public class CallExp extends Exp {
             bind = e.bind(bind);
         }
 
+        functionDec.isUsed = true;
+
         return bind;
     }
 
