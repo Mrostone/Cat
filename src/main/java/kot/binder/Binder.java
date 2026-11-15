@@ -113,6 +113,9 @@ public class Binder {
         if (var.size() == 0) {
             throw new Exception("No scope for var");
         }
+        if (var.getLast().containsKey(name)) {
+            throw new Exception("Var : '" + name + "' already exist");
+        }
 
         var.getLast().put(name, exp);
     }

@@ -1,0 +1,6 @@
+int test = 0;
+
+int bar () {
+    int test = 1;
+    return test;
+};
