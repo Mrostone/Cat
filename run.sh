@@ -8,6 +8,12 @@ PUR="\033[0;35m"
 BLU="\033[0;34m"
 CYA="\033[0;36m"
 
+DISPLAY_AST=0
+
+if [ $# -eq 2 ] && [ $2 = "-a" ]; then
+        DISPLAY_AST=1
+fi
+
 HOME_PWD=$(pwd)
 
 color()
@@ -29,8 +35,14 @@ fi
 color $PUR"Running on file : $1"
 
 t1=$(date +%s%N)
-java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1
-result=$?
+result=0
+if [ $DISPLAY_AST -eq 1 ]; then
+    java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1 -a
+    result=$?
+else
+    java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1
+    result=$?
+fi
 t2=$(date +%s%N)
 diff_ms=$(( (t2 - t1) / 1000000 ))
 duration=$(printf "%d.%03d s" $((diff_ms / 1000)) $((diff_ms % 1000)))

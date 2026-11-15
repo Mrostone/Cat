@@ -39,11 +39,6 @@ public class Main {
                     break;
                 case "--txt":
                         txtParse = true;
-                        if(i + 2 < args.length)
-                        {
-                            fileAst = args[i + 1];
-                            i++;
-                        }
                     break;
                 default:
                     if (arg.startsWith("-"))
