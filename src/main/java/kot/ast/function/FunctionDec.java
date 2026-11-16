@@ -41,6 +41,11 @@ public class FunctionDec extends Exp{
         }
         bind.popVar();
 
+        if(this.name.equals("main"))
+        {
+            this.isUsed = true;
+        }
+
         return bind;
     }
 
