@@ -26,16 +26,20 @@ public class Binder {
         newFunc();
         newVar();
         ast.exps.getFirst().bind(this);
-        clean();
     }
 
     public void clean() {
+        ArrayList<Exp> listToRemove = new ArrayList<Exp>();
         for (Exp exp : ast.exps) {
             if (exp instanceof SeqExp) {
                 SeqExp seq = (SeqExp) exp;
                 seq.clean();
+                if(seq.list.isEmpty()) {
+                    listToRemove.add(exp);
+                }
             }
         }
+        ast.exps.removeAll(listToRemove);
     }
 
     //PRIMITIVES

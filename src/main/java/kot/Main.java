@@ -89,6 +89,10 @@ public class Main {
 
                 typeCheck.typeCheck();
 
+                binder = new Binder(ast);
+
+                binder.clean();
+
                 if(displayAst)
                 {
                     Ast.toHtml(ast, Path.of(fileAst));

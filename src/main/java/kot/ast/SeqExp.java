@@ -8,7 +8,7 @@ import kot.binder.Binder;
 import kot.utils.Position;
 
 public class SeqExp extends Exp {
-    ArrayList<Exp> list = new ArrayList<>();
+    public ArrayList<Exp> list = new ArrayList<>();
 
     public SeqExp(Position pos) {
         this.pos = pos;
