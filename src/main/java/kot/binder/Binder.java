@@ -42,6 +42,44 @@ public class Binder {
         ast.exps.removeAll(listToRemove);
     }
 
+    public void makeMain() {
+        FunctionDec _main = new FunctionDec(IntType.getInstance(), "_main", new ArrayList<VarDec>(), null, new Position(0,0));
+        Exp mainFunc = null;
+        for (Exp exp : ast.exps) {
+            if (exp instanceof SeqExp) {
+                SeqExp _seqMain = new SeqExp(new Position(0,0));
+                SeqExp seq = (SeqExp) exp;
+                Exp mainBody = null;
+                for (Exp expSeq : seq.list)
+                {
+                    if (expSeq instanceof FunctionDec && ((FunctionDec)expSeq).name.equals("main"))
+                    {
+                        mainBody = ((FunctionDec)expSeq).body;
+                        mainFunc = expSeq;
+                    }
+                    else if (expSeq instanceof FunctionDec)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        _seqMain.add(expSeq);
+                    }
+                }
+                if(mainBody != null)
+                {
+                    _seqMain.add(mainBody);
+                }
+                _main.body = _seqMain;
+                if(mainFunc != null)
+                {
+                    seq.list.remove(mainFunc);
+                }
+            }
+        }
+        ast.exps.add(_main);
+    }
+
     //PRIMITIVES
 
     public FunctionDec getPrimitive(String name) {

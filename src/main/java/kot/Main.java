@@ -93,6 +93,8 @@ public class Main {
 
                 binder.clean();
 
+                binder.makeMain();
+
                 if(displayAst)
                 {
                     Ast.toHtml(ast, Path.of(fileAst));
