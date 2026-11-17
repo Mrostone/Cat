@@ -1,0 +1,9 @@
+int main() {
+    print("Start main");
+    print("Hello 'in main function'");
+    return 0;
+};
+
+print("Start code");
+
+print("In code print");

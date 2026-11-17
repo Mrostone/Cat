@@ -86,7 +86,7 @@ public class Binder {
         for (Exp e : ast.exps) {
             if (e instanceof FunctionDec) {
                 FunctionDec f = (FunctionDec) e;
-                if (f.name == name) {
+                if (f.name.equals(name)) {
                     return f;
                 }
             }
