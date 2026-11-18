@@ -14,7 +14,7 @@ int main()
     {
         print("Yes nothing is right");
         return 0;
-    };
+    }
     print("There is an error on 0 < 1");
     return 8;
-};
+}

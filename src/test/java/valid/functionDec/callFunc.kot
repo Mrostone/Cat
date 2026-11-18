@@ -1,5 +1,5 @@
 string bar(){
-	return "Hello bar";
-};
+    return "Hello bar";
+}
 
 print(bar());

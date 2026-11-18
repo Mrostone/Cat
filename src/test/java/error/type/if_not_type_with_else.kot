@@ -9,6 +9,6 @@ int main()
     {
         print("No");
         return "TOTO";
-    };
+    }
     return 0;
-};
+}

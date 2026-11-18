@@ -28,6 +28,9 @@ seqExp returns [SeqExp node]
 
 stmt returns [Exp node]
     : e=exp ';'   { $node = $e.node; }
+    | t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | i=if { $node = $i.node; }
+    | f=for { $node = $f.node; }
     ;
 
 
@@ -88,10 +91,7 @@ else returns [SeqExp node]
     ;
 
 exp returns [Exp node]
-    : t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
-    | v=varDec { $node = $v.node; }
-    | f=for { $node = $f.node; }
-    | i=if { $node = $i.node; }
+    : v=varDec { $node = $v.node; }
     | RETURN e=exp { $node = new ReturnExp($e.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | left=exp op=('*' | '/') right=exp 
         { 

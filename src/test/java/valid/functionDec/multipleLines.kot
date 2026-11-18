@@ -1,5 +1,5 @@
 int foo(int a) {
-	print("Hello");
-	int b = a + 10;
-	return b;
-};
+    print("Hello");
+    int b = a + 10;
+    return b;
+}

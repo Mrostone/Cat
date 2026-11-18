@@ -1,4 +1,4 @@
 int bar() {
     int out = 0;
     return ou;
-};
+}

@@ -3,4 +3,4 @@ void bar() {
     {
         print("Hello");
     }
-};
+}

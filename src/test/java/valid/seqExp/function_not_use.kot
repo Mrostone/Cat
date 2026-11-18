@@ -1,9 +1,9 @@
 int bar () {
     return 0;
-};
+}
 
 string foo (string out) {
     return out;
-};
+}
 
 print(foo("Hello"));
