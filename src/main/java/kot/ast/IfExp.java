@@ -70,6 +70,18 @@ public class IfExp extends Exp {
 
     @Override
     public void clean() {
-        body.clean();
+        if (op != null) {
+            op.clean();
+        }
+        if (body != null) {
+            body.clean();
+        }
+        for (Exp el : elifList)
+        {
+            el.clean();
+        }
+        if(elseClause != null) {
+            elseClause.clean();
+        }
     }
 }

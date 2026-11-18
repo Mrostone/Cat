@@ -31,6 +31,7 @@ stmt returns [Exp node]
     | t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | i=if { $node = $i.node; }
     | f=for { $node = $f.node; }
+    | w=while { $node = $w.node; }
     ;
 
 
@@ -88,6 +89,10 @@ elif returns [IfExp node]
 
 else returns [SeqExp node]
     : 'else' '{' b=seqExp '}' { $node = $b.node; }
+    ;
+
+while returns [WhileExp node]
+    : 'while' '(' o=exp ')' '{' b=seqExp '}' { $node = new WhileExp($o.node, $b.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     ;
 
 exp returns [Exp node]
