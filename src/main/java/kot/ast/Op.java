@@ -8,8 +8,8 @@ public enum Op {
     /* "/" */ div,
 
     // Comparison.
-    /* "=" */ eq,
-    /* "<>" */ ne,
+    /* "==" */ eq,
+    /* "!=" */ ne,
     /* "<" */ lt,
     /* "<=" */ le,
     /* ">" */ gt,
