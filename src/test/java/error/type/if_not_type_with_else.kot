@@ -1,0 +1,14 @@
+int main()
+{
+    if (0 < 1)
+    {
+        print("Yes");
+        return 0;
+    }
+    else
+    {
+        print("No");
+        return "TOTO";
+    };
+    return 0;
+};

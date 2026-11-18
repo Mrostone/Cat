@@ -1,0 +1,75 @@
+package kot.ast;
+
+import kot.ast.type.VoidType;
+import kot.binder.Binder;
+import kot.utils.Position;
+import java.util.ArrayList;
+import kot.utils.ErrorHandler;
+
+public class IfExp extends Exp {
+    Exp op;
+    SeqExp body;
+    ArrayList<Exp> elifList;
+    SeqExp elseClause;
+
+    public IfExp(Exp op, SeqExp body, ArrayList<Exp> elifList, SeqExp elseClause, Position pos) {
+        this.op = op;
+        this.body = body;
+        this.elifList = elifList;
+        this.elseClause = elseClause;
+        this.pos = pos;
+    }
+
+    @Override
+    public Binder bind(Binder bind) {
+        if (op != null) {
+            bind = op.bind(bind);
+        }
+        if (body != null) {
+            bind = body.bind(bind);
+        }
+        for (Exp el : elifList)
+        {
+            bind = el.bind(bind);
+        }
+        if(elseClause != null) {
+            bind = elseClause.bind(bind);
+        }
+        return bind;
+    }
+
+    @Override
+    public void typeCheck() {
+        if (op != null) {
+            op.typeCheck();
+        }
+        if (body != null) {
+            body.typeCheck();
+            this.type = body.getType();
+        }
+        else {
+            this.type = VoidType.getInstance();
+        }
+
+        for (Exp el : elifList)
+        {
+            el.typeCheck();
+            if (this.type != el.getType())
+            {
+                ErrorHandler.error(this, 4, "Error if type : " + this.type.getClass() + " and elif type : " + el.getType().getClass());
+            }
+        }
+        if(elseClause != null) {
+            elseClause.typeCheck();
+            if (this.type != elseClause.getType())
+            {
+                ErrorHandler.error(this, 4, "Error if type : " + this.type.getClass() + " and else type : " + elseClause.getType().getClass());
+            }
+        }
+    }
+
+    @Override
+    public void clean() {
+        body.clean();
+    }
+}

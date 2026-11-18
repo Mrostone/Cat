@@ -67,10 +67,31 @@ for returns [ForExp node]
     : 'for' '(' v=varDec ';' o=exp ';' e=exp ')' '{' b=seqExp '}' { $node = new ForExp($v.node, $o.node, $e.node, $b.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     ;
 
+if returns [IfExp node]
+    : 'if' '(' o=exp ')' '{' b=seqExp '}' { $node = new IfExp($o.node, $b.node, new ArrayList<>(), null, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | 'if' '(' o=exp ')' '{' b=seqExp '}' el=elifList { $node = new IfExp($o.node, $b.node, $el.node, null, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | 'if' '(' o=exp ')' '{' b=seqExp '}' es=else { $node = new IfExp($o.node, $b.node, new ArrayList<>(), $es.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    | 'if' '(' o=exp ')' '{' b=seqExp '}' el=elifList es=else { $node = new IfExp($o.node, $b.node, $el.node, $es.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    ;
+
+elifList returns [ArrayList<Exp> node]
+    @init { $node = new ArrayList<>(); }
+    : (i=elif { $node.add($i.node); })+
+    ;
+
+elif returns [IfExp node]
+    : 'elif' '(' o=exp ')' '{' b=seqExp '}' { $node = new IfExp($o.node, $b.node, new ArrayList<>(), null, new Position($start.getLine(), $start.getCharPositionInLine())); }
+    ;
+
+else returns [SeqExp node]
+    : 'else' '{' b=seqExp '}' { $node = $b.node; }
+    ;
+
 exp returns [Exp node]
     : t=type ID '(' l=varList ')' '{' s=seqExp '}' { $node = new FunctionDec($t.node, $ID.text, $l.list, $s.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | v=varDec { $node = $v.node; }
     | f=for { $node = $f.node; }
+    | i=if { $node = $i.node; }
     | RETURN e=exp { $node = new ReturnExp($e.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | left=exp op=('*' | '/') right=exp 
         { 
