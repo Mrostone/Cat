@@ -17,6 +17,7 @@ public class Binder {
     Ast ast;
     public ArrayList<HashMap<String,FunctionDec>> function = new ArrayList<>();
     public ArrayList<HashMap<String,VarDec>> var = new ArrayList<>();
+    public Exp currentLoop = null;
 
     public Binder(Ast ast) {
         this.ast = ast;

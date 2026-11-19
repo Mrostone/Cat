@@ -31,7 +31,10 @@ public class ForExp extends Exp {
             bind = op.bind(bind);
         }
         if (body != null) {
+            Exp tempLoop = bind.currentLoop;
+            bind.currentLoop = this;
             bind = body.bind(bind);
+            bind.currentLoop = tempLoop;
         }
         bind.popVar();
         return bind;

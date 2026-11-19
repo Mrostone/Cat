@@ -97,6 +97,7 @@ while returns [WhileExp node]
 
 exp returns [Exp node]
     : v=varDec { $node = $v.node; }
+    | 'break' { $node = new BreakExp(new Position($start.getLine(), $start.getCharPositionInLine())); }
     | RETURN e=exp { $node = new ReturnExp($e.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     | left=exp op=('*' | '/') right=exp 
         { 

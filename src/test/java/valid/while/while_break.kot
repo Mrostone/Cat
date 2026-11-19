@@ -1,0 +1,15 @@
+int main()
+{
+    int i = 0;
+    while(i < 10)
+    {
+        if (i == 5)
+        {
+            print("Should break");
+            break;
+        }
+        i++;
+        print("Hello again");
+    }
+    return 0;
+}
