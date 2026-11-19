@@ -45,6 +45,7 @@ public class Binder {
 
     public void makeMain() {
         FunctionDec _main = new FunctionDec(IntType.getInstance(), "_main", new ArrayList<VarDec>(), null, new Position(0,0));
+        _main.isUsed = true;
         Exp mainFunc = null;
         for (Exp exp : ast.exps) {
             if (exp instanceof SeqExp) {
