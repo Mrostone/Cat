@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import kot.antlr.KotLexer;
 import kot.antlr.KotParser;
 import kot.antlr.KotParser.AstContext;
+import kot.assembly.Assembly;
 import kot.ast.Ast;
 import kot.binder.Binder;
 import kot.typecheck.TypeCheck;
@@ -25,6 +26,7 @@ public class Main {
         boolean displayAst = false;
         boolean txtParse = false;
         String fileAst = "ast.html";
+        String fileOut = "exec.S";
         for (int i = 0; i < args.length; i++)
         {
             String arg = args[i];
@@ -94,6 +96,9 @@ public class Main {
                 binder.clean();
 
                 binder.makeMain();
+
+                Assembly assembly = new Assembly(ast, fileOut);
+                assembly.convert();
 
                 if(displayAst)
                 {

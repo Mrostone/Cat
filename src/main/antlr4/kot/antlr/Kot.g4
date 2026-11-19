@@ -12,7 +12,7 @@ import kot.ast.type.*;
 import kot.ast.function.FunctionDec;
 import kot.ast.function.ReturnExp;
 import kot.ast.OpExp;
-import kot.ast.Op;
+import kot.utils.Op;
 import kot.utils.Position;
 }
 

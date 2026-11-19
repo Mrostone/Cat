@@ -1,6 +1,8 @@
 package kot.ast.function;
 
 import kot.ast.Exp;
+import kot.ast.type.IntType;
+import kot.ast.var.IntExp;
 import kot.binder.Binder;
 import kot.utils.ErrorHandler;
 import kot.utils.Position;
@@ -30,5 +32,25 @@ public class ReturnExp extends Exp {
     @Override
     public void clean() {
         exp.clean();
+    }
+
+    @Override
+    public String assemble(String out) {
+        if (this.type == IntType.getInstance())
+        {
+            if (exp instanceof IntExp)
+            {
+                IntExp intExp = (IntExp) exp;
+                if (intExp.value == 0)
+                {
+                    out = out.concat("\txor %rdi, %rdi\n\tcall my_exit\n\tret\n");
+                }
+                else {
+                    String valString = String.format("%d", intExp.value);
+                    out = out.concat("\tmov $" + valString + ", %rdi\n\tcall my_exit\n\tret\n");
+                }
+            }
+        }
+        return out;
     }
 }

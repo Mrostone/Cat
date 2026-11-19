@@ -68,4 +68,11 @@ public class FunctionDec extends Exp{
             body.clean();
         }
     }
+
+    @Override
+    public String assemble(String out) {
+        // TODO
+        out = body.assemble(out);
+        return out;
+    }
 }

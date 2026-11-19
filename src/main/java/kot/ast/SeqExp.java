@@ -91,4 +91,13 @@ public class SeqExp extends Exp {
 
         list.removeAll(toRemove);
     }
+
+    @Override
+    public String assemble(String out) {
+        for (Exp exp : list)
+        {
+            out = exp.assemble(out);
+        }
+        return out;
+    }
 }

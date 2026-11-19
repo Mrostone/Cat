@@ -23,4 +23,8 @@ public abstract class Exp {
     public void clean() {
         return;
     }
+
+    public String assemble(String out) {
+        return out;
+    }
 }
