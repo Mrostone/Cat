@@ -1,10 +1,12 @@
 package kot.ast.var;
 
 import kot.ast.Exp;
+import kot.ast.type.IntType;
 import kot.ast.type.Type;
 import kot.binder.Binder;
 import kot.utils.ErrorHandler;
 import kot.utils.Position;
+import kot.assembly.*;
 
 public class VarExp extends Exp {
     public String name;
@@ -40,5 +42,15 @@ public class VarExp extends Exp {
             t = var.getType();
         }
         this.type = t;
+    }
+
+    @Override
+    public Assembly assemble(Assembly asm) {
+        if(this.type == IntType.getInstance())
+        {
+            String ret = String.format("%s(%%rip)", name);
+            asm.lastExp = ret;
+        }
+        return asm;
     }
 }

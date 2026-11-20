@@ -8,6 +8,7 @@ import kot.assembly.*;
 public abstract class Exp {
     public Type type = null;
     public Position pos = null;
+    public String nameAssembly = "";
 
     public Binder bind(Binder bind) {
         return bind;

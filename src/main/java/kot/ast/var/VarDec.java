@@ -35,6 +35,7 @@ public class VarDec extends Exp{
         return bind;
     }
 
+    @Override
     public void typeCheck() {
         if (init != null) {
             init.typeCheck();
@@ -45,13 +46,15 @@ public class VarDec extends Exp{
         }
     }
 
+    @Override
     public Assembly assemble(Assembly asm) {
         if (this.type == IntType.getInstance())
         {
             IntExp value = (IntExp) init;
-            String var = String.format("%s DQ %d\n", name, value.value);
+            String var = String.format("%s:\n\t .quad %d\n", name, value.value);
             asm.varMap.put(this, var);
         }
+        //Todo other types
         return asm;
     }
 }

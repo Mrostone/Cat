@@ -13,6 +13,7 @@ public class StringExp extends Exp{
         this.pos = pos;
     }
 
+    @Override
     public void typeCheck() {
         this.type = StringType.getInstance();
     }

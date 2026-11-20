@@ -117,10 +117,21 @@ public class SeqExp extends Exp {
 
     @Override
     public Assembly assemble(Assembly asm) {
+        String func = "seq_" + asm.nbFunc;
+        this.nameAssembly = func;
+        func = func.concat(":\n");
+        asm.nbFunc++;
         for (Exp exp : list)
         {
             asm = exp.assemble(asm);
+            if (asm.lastExp != null)
+            {
+                func = func.concat(asm.lastExp);
+                asm.lastExp = null;
+            }
         }
+        func = func.concat("\tret\n");
+        asm.funcMap.put(this,func);
         return asm;
     }
 }

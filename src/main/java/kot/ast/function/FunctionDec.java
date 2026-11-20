@@ -2,13 +2,13 @@ package kot.ast.function;
 
 import java.util.List;
 
-import kot.ast.Exp;
 import kot.ast.type.Type;
 import kot.ast.var.VarDec;
 import kot.binder.Binder;
 import kot.utils.ErrorHandler;
 import kot.utils.Position;
 import kot.assembly.*;
+import kot.ast.*;
 
 public class FunctionDec extends Exp{
     public String name;
@@ -74,9 +74,13 @@ public class FunctionDec extends Exp{
     public Assembly assemble(Assembly asm) {
         if(name.equals("_main"))
         {
-            asm.main = this;
+            SeqExp seqBody = (SeqExp) body;
+            asm.main = seqBody;
         }
-        asm = body.assemble(asm);
+        if(body != null)
+        {
+            asm = body.assemble(asm);
+        }
         return asm;
     }
 }

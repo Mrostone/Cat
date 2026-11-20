@@ -43,6 +43,9 @@ else
     java -jar "${HOME_PWD}/target/kot-1.0-SNAPSHOT.jar" $1
     result=$?
 fi
+
+gcc -nostdlib -no-pie exec.S src/main/resources/exit.S src/main/resources/if.S src/main/resources/print.S src/main/resources/print_char.o -o a.out -g
+
 t2=$(date +%s%N)
 diff_ms=$(( (t2 - t1) / 1000000 ))
 duration=$(printf "%d.%03d s" $((diff_ms / 1000)) $((diff_ms % 1000)))

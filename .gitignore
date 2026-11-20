@@ -28,3 +28,4 @@ replay_pid*
 target/
 *.html
 exec.S
+a.out

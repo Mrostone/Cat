@@ -1,11 +1,13 @@
 package kot.ast.function;
 
+import kot.assembly.Assembly;
 import kot.ast.Exp;
 import kot.ast.type.IntType;
 import kot.ast.var.IntExp;
 import kot.binder.Binder;
 import kot.utils.ErrorHandler;
 import kot.utils.Position;
+import kot.assembly.*;
 
 public class ReturnExp extends Exp {
     Exp exp;
@@ -32,5 +34,13 @@ public class ReturnExp extends Exp {
     @Override
     public void clean() {
         exp.clean();
+    }
+
+    @Override
+    public Assembly assemble(Assembly asm) {
+        asm = exp.assemble(asm);
+        String ret = String.format("\tmov %s, %%rax\n", asm.lastExp);
+        asm.lastExp = ret;
+        return asm;
     }
 }
