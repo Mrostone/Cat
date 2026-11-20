@@ -6,6 +6,7 @@ import kot.ast.var.VarDec;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import kot.ast.function.FunctionDec;
 
 public class Assembly {
     Ast ast;
@@ -36,6 +37,7 @@ public class Assembly {
         }
         out = out.concat("\n");
         out = out.concat(".text\n_start:\n");
+        out = out.concat("\tmov %rax, %rdi\n\tcall my_exit\n\tret\n");
         //out = out.concat("\txor %rdi, %rdi\n\tcall my_exit\n\tret\n");
         try {
             FileWriter fWriter = new FileWriter(file);

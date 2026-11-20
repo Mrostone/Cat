@@ -78,7 +78,6 @@ public class SeqExp extends Exp {
             }
             else if (e instanceof SeqExp) {
                 e.clean();
-                System.out.println("seqExp");
                 SeqExp seqExp = (SeqExp) e;
                 int index = list.indexOf(e);
                 ArrayList<Exp> listSeq = new ArrayList<>();
