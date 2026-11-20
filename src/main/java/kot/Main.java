@@ -93,9 +93,9 @@ public class Main {
 
                 binder = new Binder(ast);
 
-                binder.clean();
-
                 binder.makeMain();
+
+                binder.clean();
 
                 Assembly assembly = new Assembly(ast, fileOut);
                 assembly.convert();

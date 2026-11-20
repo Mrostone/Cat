@@ -8,6 +8,7 @@ import kot.ast.var.VarDec;
 import kot.binder.Binder;
 import kot.utils.ErrorHandler;
 import kot.utils.Position;
+import kot.assembly.*;
 
 public class FunctionDec extends Exp{
     public String name;
@@ -69,10 +70,13 @@ public class FunctionDec extends Exp{
         }
     }
 
-    @Override
-    public String assemble(String out) {
-        // TODO
-        out = body.assemble(out);
-        return out;
+    @Override 
+    public Assembly assemble(Assembly asm) {
+        if(name.equals("_main"))
+        {
+            asm.main = this;
+        }
+        asm = body.assemble(asm);
+        return asm;
     }
 }

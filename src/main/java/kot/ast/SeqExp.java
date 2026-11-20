@@ -7,6 +7,7 @@ import kot.ast.function.FunctionDec;
 import kot.ast.var.VarDec;
 import kot.binder.Binder;
 import kot.utils.Position;
+import kot.assembly.*;
 
 public class SeqExp extends Exp {
     public ArrayList<Exp> list = new ArrayList<>();
@@ -40,6 +41,7 @@ public class SeqExp extends Exp {
     public void clean() {
         ArrayList<Exp> toRemove = new ArrayList<Exp>();
         HashMap<Integer, ArrayList<Exp>> forList = new HashMap<>();
+        HashMap<Integer, ArrayList<Exp>> seqList = new HashMap<>();
         for(Exp e : list) {
             if (e instanceof FunctionDec) {
                 FunctionDec functionDec = (FunctionDec) e;
@@ -60,6 +62,7 @@ public class SeqExp extends Exp {
                 }
             }
             else if (e instanceof ForExp) {
+                e.clean();
                 ForExp forExp = (ForExp) e;
                 int index = list.indexOf(e);
                 SeqExp bodyFor = forExp.body;
@@ -72,6 +75,17 @@ public class SeqExp extends Exp {
                 listFor.add(forExp.var);
                 listFor.add(ifExp);
                 forList.put(index, listFor);
+            }
+            else if (e instanceof SeqExp) {
+                e.clean();
+                System.out.println("seqExp");
+                SeqExp seqExp = (SeqExp) e;
+                int index = list.indexOf(e);
+                ArrayList<Exp> listSeq = new ArrayList<>();
+                for (Exp exp : seqExp.list) {
+                    listSeq.add(exp);
+                }
+                seqList.put(index, listSeq);
             }
             else {
                 e.clean();
@@ -88,16 +102,26 @@ public class SeqExp extends Exp {
                 index++;
             }
         }
+        for (int ind : seqList.keySet())
+        {
+            toRemove.add(list.get(ind));
+            int index = ind;
+            for (Exp exp : seqList.get(ind))
+            {
+                list.add(index, exp);
+                index++;
+            }
+        }
 
         list.removeAll(toRemove);
     }
 
     @Override
-    public String assemble(String out) {
+    public Assembly assemble(Assembly asm) {
         for (Exp exp : list)
         {
-            out = exp.assemble(out);
+            asm = exp.assemble(asm);
         }
-        return out;
+        return asm;
     }
 }

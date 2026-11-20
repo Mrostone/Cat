@@ -59,22 +59,4 @@ public class OpExp extends Exp{
 
         this.type = l;
     }
-
-    @Override
-    public String assemble(String out) {
-        if (op.equals(Op.eq) || op.equals(Op.ge) || op.equals(Op.gt) || op.equals(Op.le) || op.equals(Op.lt) || op.equals(Op.ne)) {
-            Type l = left.getType();
-            if (l == IntType.getInstance())
-            {
-                if (left instanceof IntExp)
-                {
-                    IntExp leftInt = (IntExp) left;
-                    IntExp rightInt = (IntExp) right;
-                    String opOut = String.format("\tmov $%d, %%rdi\n\tmov $%d, %%rsi\n\tmov $%d, %%rdx\n", leftInt.value, rightInt.value, op.getNum());
-                    out = out.concat(opOut);
-                }
-            }
-        }
-        return out;
-    }
 }

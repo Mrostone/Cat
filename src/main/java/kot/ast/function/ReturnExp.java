@@ -33,24 +33,4 @@ public class ReturnExp extends Exp {
     public void clean() {
         exp.clean();
     }
-
-    @Override
-    public String assemble(String out) {
-        if (this.type == IntType.getInstance())
-        {
-            if (exp instanceof IntExp)
-            {
-                IntExp intExp = (IntExp) exp;
-                if (intExp.value == 0)
-                {
-                    out = out.concat("\txor %rdi, %rdi\n\tcall my_exit\n\tret\n");
-                }
-                else {
-                    String valString = String.format("%d", intExp.value);
-                    out = out.concat("\tmov $" + valString + ", %rdi\n\tcall my_exit\n\tret\n");
-                }
-            }
-        }
-        return out;
-    }
 }

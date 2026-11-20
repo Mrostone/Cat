@@ -39,6 +39,9 @@ public class Binder {
                     listToRemove.add(exp);
                 }
             }
+            else {
+                exp.clean();
+            }
         }
         ast.exps.removeAll(listToRemove);
     }

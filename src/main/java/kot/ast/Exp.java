@@ -3,6 +3,7 @@ package kot.ast;
 import kot.ast.type.Type;
 import kot.binder.Binder;
 import kot.utils.Position;
+import kot.assembly.*;
 
 public abstract class Exp {
     public Type type = null;
@@ -24,7 +25,7 @@ public abstract class Exp {
         return;
     }
 
-    public String assemble(String out) {
-        return out;
+    public Assembly assemble(Assembly asm) {
+        return asm;
     }
 }

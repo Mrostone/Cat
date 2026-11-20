@@ -1,10 +1,13 @@
 package kot.ast.var;
 
+import kot.assembly.Assembly;
 import kot.ast.Exp;
+import kot.ast.type.IntType;
 import kot.ast.type.Type;
 import kot.binder.Binder;
 import kot.utils.ErrorHandler;
 import kot.utils.Position;
+import kot.assembly.*;
 
 public class VarDec extends Exp{
     public String name;
@@ -40,5 +43,15 @@ public class VarDec extends Exp{
                 ErrorHandler.error(this, 4, "error type var got : " + this.type + " excpected : " + t);
             }
         }
+    }
+
+    public Assembly assemble(Assembly asm) {
+        if (this.type == IntType.getInstance())
+        {
+            IntExp value = (IntExp) init;
+            String var = String.format("%s DQ %d\n", name, value.value);
+            asm.varMap.put(this, var);
+        }
+        return asm;
     }
 }

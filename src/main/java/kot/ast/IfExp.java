@@ -84,14 +84,4 @@ public class IfExp extends Exp {
             elseClause.clean();
         }
     }
-
-    @Override
-    public String assemble(String out) {
-        if(op instanceof OpExp)
-        {
-            out = op.assemble(out);
-            out = out.concat("\tcall my_if\n");
-        }
-        return out;
-    }
 }

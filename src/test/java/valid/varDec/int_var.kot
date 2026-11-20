@@ -1,1 +1,5 @@
 int test = 4;
+
+int main() {
+    return test;
+}
