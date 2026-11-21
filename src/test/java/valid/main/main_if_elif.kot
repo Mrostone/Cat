@@ -1,0 +1,17 @@
+int main()
+{
+    int test = 4;
+    if (test == 3)
+    {
+        return 3;
+    }
+    elif (test == 2)
+    {
+        return 2;
+    }
+    elif(test == 4)
+    {
+        return 0;
+    }
+    return 1;
+}

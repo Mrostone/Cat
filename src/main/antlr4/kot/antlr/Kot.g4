@@ -78,7 +78,7 @@ if returns [IfExp node]
     | 'if' '(' o=exp ')' '{' b=seqExp '}' el=elifList es=else { $node = new IfExp($o.node, $b.node, $el.node, $es.node, new Position($start.getLine(), $start.getCharPositionInLine())); }
     ;
 
-elifList returns [ArrayList<Exp> node]
+elifList returns [ArrayList<IfExp> node]
     @init { $node = new ArrayList<>(); }
     : (i=elif { $node.add($i.node); })+
     ;

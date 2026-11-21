@@ -10,10 +10,10 @@ import kot.utils.ErrorHandler;
 public class IfExp extends Exp {
     Exp op;
     SeqExp body;
-    ArrayList<Exp> elifList;
+    ArrayList<IfExp> elifList;
     SeqExp elseClause;
 
-    public IfExp(Exp op, SeqExp body, ArrayList<Exp> elifList, SeqExp elseClause, Position pos) {
+    public IfExp(Exp op, SeqExp body, ArrayList<IfExp> elifList, SeqExp elseClause, Position pos) {
         this.op = op;
         this.body = body;
         this.elifList = elifList;
@@ -29,7 +29,7 @@ public class IfExp extends Exp {
         if (body != null) {
             bind = body.bind(bind);
         }
-        for (Exp el : elifList)
+        for (IfExp el : elifList)
         {
             bind = el.bind(bind);
         }
@@ -52,7 +52,7 @@ public class IfExp extends Exp {
             this.type = VoidType.getInstance();
         }
 
-        for (Exp el : elifList)
+        for (IfExp el : elifList)
         {
             el.typeCheck();
             if (this.type != el.getType())
@@ -77,7 +77,7 @@ public class IfExp extends Exp {
         if (body != null) {
             body.clean();
         }
-        for (Exp el : elifList)
+        for (IfExp el : elifList)
         {
             el.clean();
         }
@@ -101,6 +101,12 @@ public class IfExp extends Exp {
         body.assemble(asm);
 
         out = out.concat("\tje " + body.nameAssembly + "\n");
+
+        for (IfExp el : elifList)
+        {
+            el.assemble(asm);
+            out = out.concat(asm.lastExp);
+        }
 
         asm.lastExp = out;
         return asm;
