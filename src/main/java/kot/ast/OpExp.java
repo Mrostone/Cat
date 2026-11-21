@@ -1,5 +1,6 @@
 package kot.ast;
 
+import kot.assembly.Assembly;
 import kot.ast.type.IntType;
 import kot.ast.type.Type;
 import kot.ast.var.IntExp;
@@ -58,5 +59,19 @@ public class OpExp extends Exp{
         }
 
         this.type = l;
+    }
+
+    @Override
+    public Assembly assemble(Assembly asm) {
+        asm = left.assemble(asm);
+        String leftValue = asm.lastExp;
+
+        asm = right.assemble(asm);
+        String rightValue = asm.lastExp;
+
+        String out = String.format("\tmov %s, %%rdi\n\tmov %s, %%rsi\n\tmov $%d, %%rdx\n", leftValue, rightValue, op.getNum());
+
+        asm.lastExp = out;
+        return asm;
     }
 }

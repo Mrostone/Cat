@@ -1,6 +1,8 @@
 package kot.ast.var;
 
+import kot.assembly.Assembly;
 import kot.ast.Exp;
+import kot.ast.type.IntType;
 import kot.ast.type.Type;
 import kot.ast.type.VoidType;
 import kot.binder.Binder;
@@ -50,5 +52,20 @@ public class AssignExp extends Exp {
     @Override
     public void clean() {
         exp.clean();
+    }
+
+    @Override
+    public Assembly assemble(Assembly asm) {
+        asm = exp.assemble(asm);
+        String expValue = asm.lastExp;
+
+        if(var.type == IntType.getInstance())
+        {
+            String out = String.format("\tmovq %s, %s\n", expValue, var.name);
+            asm.lastExp = out;
+        }
+        // TODO Other type
+
+        return asm;
     }
 }

@@ -1,0 +1,15 @@
+int main()
+{
+    int first = 0;
+    int second = 5;
+    if (first > second)
+    {
+        return 3;
+    }
+    first = 6;
+    if (first < second)
+    {
+        return 4;
+    }
+    return 0;
+}

@@ -1,5 +1,6 @@
 package kot.ast;
 
+import kot.assembly.Assembly;
 import kot.ast.type.VoidType;
 import kot.binder.Binder;
 import kot.utils.Position;
@@ -83,5 +84,25 @@ public class IfExp extends Exp {
         if(elseClause != null) {
             elseClause.clean();
         }
+    }
+
+    @Override
+    public Assembly assemble(Assembly asm) {
+        String out = "";
+        if (op instanceof OpExp) {
+            OpExp opExp = (OpExp) op;
+            opExp.assemble(asm);
+            out = out.concat(asm.lastExp);
+        }
+        // TODO other type of op
+        out = out.concat("\tcall my_if\n");
+        out = out.concat("\tcmp $1, %rax\n");
+        
+        body.assemble(asm);
+
+        out = out.concat("\tje " + body.nameAssembly + "\n");
+
+        asm.lastExp = out;
+        return asm;
     }
 }
